@@ -23,5 +23,5 @@ jobs:
         debug: true
         script: |
           cd ~/contributoragreements.org/ca-cla-chooser
-          git pull
+          git pull origin main
 
