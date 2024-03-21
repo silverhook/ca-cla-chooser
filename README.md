@@ -26,8 +26,8 @@ The location of the microservices (https://github.com/contributoragreements/serv
 
   ```
   {
-      "serviceUrl": "http://contributoragreements.org",
-      "urlShortener": "http://contributoragreements.org/u2s"
+      "serviceUrl": "https://contributoragreements.org",
+      "urlShortener": "https://contributoragreements.org/u2s"
   }
   ```
 
