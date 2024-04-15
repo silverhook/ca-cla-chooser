@@ -1,24 +1,23 @@
 /** cla chooser main javascript by Fabricatorz **/
 
 /**
- * @TODO Need to make compact the config setting code and the review/apply
- * because lots of duplicated code.
- * @TODO fix that visual jump on patents tab
- * @TODO add cdn jquery and bootstrap and then have the local fallbacks
  * @TODO add other scaffolding for html5, standard sites, async
  * @TODO fix testGeneralPage() to be functionized so that each input tested
  * @TODO need to have some kind of timeout on the shorturl service, its blocking when service down
- *
- * @TODO finish making u2s work on catharina's server, with apache (server down right now)
  */
-// $('#rootwizard').bootstrapWizard('show', 2); // (to skip a tab)
 
+
+// TODO - for testing, having debug switch as a query parameter or similar would be nice
 var doDebug             = false;
 var debugNeedle         = 1337;
 
 var services;
 
 var gitversion;
+
+/*
+ * This function gets the version.log file from the main folder. This is set with a git hook, and is uses to be aware which version of the app is deployed at any one time.
+ */
 
 $.ajax({
     timeout: 1000,
@@ -29,14 +28,15 @@ $.ajax({
         gitversion = data;
     }
 });
-if ( doDebug )
-    console.log(gitversion)
 
-// added version to check what is running. now displays short git commit hash as version
-var version = "1.0"
+/*
+ * This displays the gitversion hash from before
+ */
 $('#version').html(gitversion)
 
-// @TODO really should make this configs and convert code below
+/*
+* This reads config options from js/config.json, f.e. the serviceUrl. It is currently used inconsistently.
+*/
 $.ajax({
     timeout: 1000,
     async: false,
@@ -46,6 +46,10 @@ $.ajax({
         services = $.parseJSON(data);
     }
 });
+
+/*
+ * As of 25.03.2024 these are the same as in the config.json.
+ */
 
 var serviceUrl, urlShortener;
 
@@ -61,6 +65,9 @@ if ( ! services || typeof services.urlShortener === 'undefined' )
 else
     urlShortener        = services["urlShortener"];
 
+/*
+ * These set up various variables to keep state of the chooser. FIXME are they really necessary?
+ */
 
 var generalPageIndex    = 0;
 var isGeneralPageOk     = false;
@@ -108,7 +115,7 @@ var dictionary = {
     'exclusive':                'Exclusive',
 };
 
-/** could even set defaults here TODO probably outdated
+/**
  *
  * Query String Possible Parameters:
  *
@@ -119,22 +126,26 @@ var dictionary = {
  * process-url=URL
  * project-jurisdiction=STRING
  *
- * contributor-option-entity=entity|individual
- * agreement-exclusivity=exclusive|nonexclusive
- * outbound-option=same|same-licenses|fsfe|no-commitment
+ * fsfe-compliance=fsfe-compliance|non-fsfe-compliance FIXME: check for consistency and implement non-fsfe-compliance properly
+ * agreement-exclusivity=exclusive|non-exclusive
+ * outbound-option=fsfe|same-licenses|license-policy|same|no-commitment
  * outboundlist=Artistic-1.0,Apache-2.0,LIST
  * outboundlist-custom=STRING
+ * license-policy-location=STRING
  * medialist=None|GFDL-1.1|CC-BY-1.0,GFDL-1.3,LIST
- * patent-option=Traditional|Patent-Pledge
- * 'fsfe-compliance':            '',
- * 'fsfe-fla':                   '',
+ * patent-option=Traditional|Patent-Pledge  // TODO why are these uppercase
  *
  * your-name=STRING
  * your-date=STRING
  * your-title=STRING
  * your-address=STRING
- *
+ * your-patents=STRING
  * pos=general|copyright|patents|review|apply
+ * action=sign-individual|sign-entity|sign-fla
+ */
+
+/*
+ * These should basically be the same as the query parameters described above.
  */
 
 var configs = {
@@ -144,16 +155,16 @@ var configs = {
     'project-email':              '',
     'process-url':                '',
     'project-jurisdiction':       '',
-    'agreement-exclusivity':      '',
     'fsfe-compliance':            '',
-    'fsfe-fla':                   '',
+    'agreement-exclusivity':      '',
     'outbound-option':            '',
     'outboundlist':               '',
     'outboundlist-custom':        '',
+    'license-policy-location':    '',
     'medialist':                  '',
     'patent-option':              '',
-    'your-date':                  '',
     'your-name':                  '',
+    'your-date':                  '',
     'your-title':                 '',
     'your-address':               '',
     'your-patents':               '',
@@ -237,19 +248,11 @@ function queryStringToConfigs ()
 }
 
 /**
- * @todo can combine this with review code and save code, but will need
- * to abstract the following more than likely into functions.
- * Then, that will allow creating a querystring easier
+ * This  function take the config values (for example when derived from a url) and update the app/UI accordingly
  */
 function updateConfigs ()
 {
 
-    /* Type of Agreement */
-
-    if ( configs["fsfe-fla"] )
-        $('#typeof-agreement').val( configs["typeof-agreement"]);
-    if ( doDebug )
-        console.log("typeof-agreement: " + configs["typeof-agreement"]);
     /* general */
 
     if ( configs["beneficiary-name"] )
@@ -279,8 +282,12 @@ function updateConfigs ()
             configs["project-jurisdiction"]);
 
     /* fsfe compliance changes */
-    if ( configs["fsfe-compliance"] )
+    // TODO move button change here? FIXME this is right, but what is the other fsfeCompliance doing?
+    if ( configs["fsfe-compliance"] == "fsfe-compliance" ) {
       $('#fsfe-compliance').val(configs["fsfe-compliance"] );
+    } else {
+        $('#fsfe-compliance').val(configs["fsfe-compliance"] );
+    }
     if ( doDebug )
         console.log("fsfe-compliance: " +
             configs["fsfe-compliance"]);
@@ -302,7 +309,7 @@ function updateConfigs ()
     $("#outboundlist").hide();
     $("#outboundlist-custom").hide();
 
-
+    // The following switch statement activates the respective UI options based on config options
     switch ( configs["outbound-option"] ) {
         // option-1
         case 'fsfe':
@@ -319,6 +326,13 @@ function updateConfigs ()
             // setOutboundOptionSameLicenses();
             $("#outboundlist").show();
             $("#outboundlist-custom").show();
+            break;
+        // option-3
+        case 'license-policy':
+            $("#outbound-option-license-policy").prop('checked', true);
+            $("#outbound-option-license-policy").change();
+            if ( configs["license-policy"] )
+                 $("#license-policy-location" ).val( configs["license-policy-location"] );
             break;
         // option-5
         case 'no-commitment':
@@ -419,9 +433,12 @@ function updateConfigs ()
 
 }
 
+/*
+ * This function loads the agreement template
+ */
+
 function loadTemplates ()
 {
-    // maybe there should be some code here to only load whatever is wanted?
     $.ajax('agreement-template-unified.html', {
         timeout: 1000,
         async: false,
@@ -454,9 +471,9 @@ function loadTemplates ()
 }
 
 /**
- * A better test now:
- * http://cla.fabricatorz.com/?beneficiary-name=Fabricatorz&project-name=Archive+Software&project-website=http%3A%2F%2Farchive.fabricatorz.com&project-email=jon%40fabricatorz.com&process-url=http%3A%2F%2Farchive.fabricatorz.com%2Fsigning&project-jurisdiction=United+States%2C+Hong+Kong%2C+and+China+Mainland.&agreement-exclusivity=&outbound-option=&outboundlist=&outboundlist-custom=&medialist=&patent-option=&pos=
+ * This function set fake test data. Once external tests are up, this should be removed. Or in any case refactored.
  */
+
 function setFakeData ()
 {
     configs['beneficiary-name']         = 'Fabricatorz';
@@ -469,6 +486,10 @@ function setFakeData ()
         'United States, Hong Kong, and China Mainland.';
 }
 
+/*
+* This function converts new lines into break tags (only used for "your-patents" list
+*/
+
 function nl2br (str, is_xhtml)
 {
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ?
@@ -477,17 +498,28 @@ function nl2br (str, is_xhtml)
         breakTag + '$2');
 }
 
+/*
+ * This function retrieves a shorturl from the u2s service. actions are set/get, and parameters f.e. l like here or a to return the url
+ */
 
 function getShortUrl(uri)
 {
     var result = '';
+    if ( doDebug ) {
+        result = "testing"
+    } else {
     $.ajax({
         url: urlShortener + '/set/?l=' + uri,
         async: false,
         success: function(data) { result = data; }
     });
+    }
     return result;
 }
+
+/*
+ * This generates the query for the e-signing form. Runs at serviceurl/query2form
+ */
 
 function updateQuery4Form ()
 {
@@ -526,10 +558,18 @@ function updateQuery4Form ()
 
 }
 
+/*
+ * Utility function to set the first char in a string to uppercase
+ */
+
 function ucFirst(string)
 {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+/*
+ * Utility function to set words in a string to uppercase
+ */
 
 function ucWords(string) {
     return (string + '').
@@ -539,11 +579,19 @@ function ucWords(string) {
             });
 }
 
+/*
+ * Utility function for crude email validation.
+ */
+
 function validateEmail(email)
 {
         var re = /\S+@\S+\.\S+/;
             return re.test(email);
 }
+
+/*
+ * Utility function for URL validation
+ */
 
 function validateURL(textval) {
           var urlregex = new RegExp(
@@ -551,6 +599,10 @@ function validateURL(textval) {
                 return urlregex.test(textval);
 }
 
+/*
+ * Utility function to inspect an object
+ * (not used as far as I can tell)
+ */
 
 function oinspect (obj)
 {
@@ -562,6 +614,11 @@ function oinspect (obj)
     alert(str);
 }
 
+/*
+ * Adjusts the patent paragraph depending on "messsage
+ * Adds "the following " + licenses + " licenses" or "the license that we are using on the submission date" into the #review-text and #review-text-emtity
+ */
+
 function fixPatentParagraph( message )
 {
     if ( typeof message == 'undefined' )
@@ -570,22 +627,16 @@ function fixPatentParagraph( message )
                   $("#tmp-licenses-2").html() + " " +
                   outAfterField;
 
-    $('#review-text #tmp-licenses-2').html( message );
+     $('#review-text #tmp-licenses-2').html( message );
     $('#review-text-entity #tmp-licenses-2').html( message );
 }
 
+/*
+ * This generates embedding code with the query put in.
+ */
+
 function getEmbedCode ( ourQuery )
 {
-    /*
-    return htmlEscape('<script type="text/javascript">' + "\n" +
-    'var iframe = document.createElement(\'iframe\');' + "\n" +
-    'document.body.appendChild(iframe);' + "\n" +
-    'iframe.src = \'' + ourQuery + '\';' + "\n" +
-    'iframe.id = \'sign-process\';' + "\n" +
-    'iframe.width = \'100%\';' +  "\n" +
-    'iframe.height = \'100%\';' + "\n" +
-    '</script>');
-    */
     return htmlEscape(
     '<iframe id="e-sign-process" src="' + ourQuery +
     '" width="100%" height="100%"></iframe>'
@@ -593,20 +644,8 @@ function getEmbedCode ( ourQuery )
 }
 
 /*
-function setFLACLAChoice ()
-{
-    if($('#fsfe-compliance') === "True") {
-        $("#apply-individual").hide();
-        $("#apply-entity").hide();
-        $("#copyright").addClass('disabled');
-        $("#patents").addClass('disabled');
-
-
-    }
-
-    //disable tabs / options that are not relevant
-}
-*/
+ * This function renumbers the relevant sections. Specifically necessary after removing or adding sections, but right probably ddone all the time to be sure. FIXME is it really necessary?
+ */
 
 function putBackOrderOfSectionsAfterSection4 ()
 {
@@ -644,21 +683,25 @@ function putBackOrderOfSectionsAfterSection4 ()
     $('#review-text-entity #tmp-digit-misc-4').html( '9.4' );
     $('#review-text-entity #tmp-digit-misc-5').html( '9.5' );
 
+    // FIXME this is never hidden as das as I can tell, so could maybe be removed
     $('#review-text #tmp-term-special').show();
     $('#review-text #tmp-term-special').removeClass("nuke");
     $('#review-text-entity #tmp-term-special').show();
     $('#review-text-entity #tmp-term-special').removeClass("nuke");
 }
 
+/*
+* This sets the outbound options as compatible with the FSFE FLA, or compatible with licenses sanctioned by the FSF or OSI.
+*/
+
 function setOutboundOptionFsfe ()
 {
-    /* remove the outbound-option in review */
-    // $("#review-outbound-licenses").html( naField );
     $("#review-outbound-licenses").html(
         $("#outbound-option-fsfe").val() );
 
     configs['outbound-option'] = 'fsfe' ;
 
+    // ensures that the outbound section is shown.
     $('#review-text-fla #tmp-outbound-section-all').show();
     $('#review-text-fla #tmp-outbound-section-all').removeClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-section-all').show();
@@ -667,18 +710,13 @@ function setOutboundOptionFsfe ()
     $('#review-text #tmp-outbound-section-all').removeClass("nuke");
     $('#review-text-entity #tmp-outbound-section-all').show();
     $('#review-text-entity #tmp-outbound-section-all').removeClass("nuke");
-
+    // inserts the fsfe field into #tmp-outbound-special which manages patents necessary for the license
     $('#review-text #tmp-licenses-2').html( fsfeField );
     $('#review-text-entity #tmp-licenses-2').html( fsfeField );
 
     /* put back order of sections after section 4 */
     putBackOrderOfSectionsAfterSection4();
-
-    /*
-    $("#tmp-licenses-2").hide();
-    $("#tmp-licenses-2").addClass("nuke");
-    */
-
+    // Enables outbound option 1 for all cla/fla indiv/entity (outbound under FSF sanctioned licenses)
     $('#review-text-fla #tmp-outbound-option-1-fsfe').show();
     $('#review-text-fla #tmp-outbound-option-1-fsfe').removeClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-1-fsfe').show();
@@ -688,6 +726,7 @@ function setOutboundOptionFsfe ()
     $('#review-text-entity #tmp-outbound-option-1-fsfe').show();
     $('#review-text-entity #tmp-outbound-option-1-fsfe').removeClass("nuke");
 
+    // Disable outbound option 2 fsfe compliant (List of licenses)
     $('#review-text-fla #tmp-outbound-option-2-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-2-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-2-fsfe').hide();
@@ -697,6 +736,7 @@ function setOutboundOptionFsfe ()
     $('#review-text-entity #tmp-outbound-option-2-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-2-fsfe').addClass("nuke");
 
+    // Disable outbound option 2 non-fsfe-compliant ("List of licenses")
     $('#review-text-fla #tmp-outbound-option-2-non-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-2-non-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-2-non-fsfe').hide();
@@ -706,6 +746,7 @@ function setOutboundOptionFsfe ()
     $('#review-text-entity #tmp-outbound-option-2-non-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-2-non-fsfe').addClass("nuke");
 
+    // Disable outbound option 3 (licensing policy) (this is the same for fsfe and non-fsfe, so there is no option-4-non-fsfe)
     $('#review-text-fla #tmp-outbound-option-3-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-3-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-3-fsfe').hide();
@@ -715,6 +756,7 @@ function setOutboundOptionFsfe ()
     $('#review-text-entity #tmp-outbound-option-3-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-3-fsfe').addClass("nuke");
 
+    // Disable option 4 (same license(s) as used on the submission date)
     $('#review-text-fla #tmp-outbound-option-4-non-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-4-non-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-4-non-fsfe').hide();
@@ -723,34 +765,35 @@ function setOutboundOptionFsfe ()
     $('#review-text #tmp-outbound-option-4-non-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-4-non-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-4-non-fsfe').addClass("nuke");
-
 }
+
+/*
+ * This sets the outbound options for the same-license option, meaning the licenses specified from a list or custom text field.
+ */
 
 function setOutboundOptionSameLicenses ()
 {
+    // sets the requisite config option
     configs['outbound-option'] = 'same-licenses';
 
+    // enables the outbound section in the template
     $("#tmp-outbound-section-all").show();
     $("#tmp-outbound-section-all").removeClass("nuke");
-
+    // insert the specific licenses into the UI
     $("#review-outbound-licenses").html( outboundCopyrightLicenses );
-
+    // insert the specific licenses into the template
     $('#review-text #tmp-licenses').html( outboundCopyrightLicenses );
     $('#review-text #tmp-licenses-2').html( outboundCopyrightLicenses );
-
+    // insert the specific licenses into the entity template
     $('#review-text-entity #tmp-licenses').html( outboundCopyrightLicenses );
-    $('#review-text-entity #tmp-licenses-2').html( outboundCopyrightLicenses );
-
+//    $('#review-text-entity #tmp-licenses-2').html( outboundCopyrightLicenses ); FIXME check, b/c I think this does not exist
+    // set the config options for the license list
     configs['outboundlist'] = outboundCopyrightLicenses;
 
     /* put back order of sections after section 4 */
     putBackOrderOfSectionsAfterSection4();
 
-    /*
-    $("#tmp-licenses-2").show();
-    $("#tmp-licenses-2").removeClass("nuke");
-    */
-
+    // this if else inserts the requisite patent license paragraph
     if ( !outboundCopyrightLicenses )
     {
         fixPatentParagraph( outBeforeField + " " +
@@ -758,9 +801,10 @@ function setOutboundOptionSameLicenses ()
     } else {
         fixPatentParagraph();
     }
-
+    // for fsfe-fla, enable and disable the requisite copyright options
     if ( $("#fsfe-compliance").hasClass('active') )
     {
+        // in this case, paragraph 1 and 2 of outbound license obligations are enabled
         $('#review-text-fla #tmp-outbound-option-1-fsfe').show();
         $('#review-text-fla #tmp-outbound-option-1-fsfe').removeClass("nuke");
         $('#review-text-fla #tmp-outbound-option-2-fsfe').show();
@@ -771,7 +815,7 @@ function setOutboundOptionSameLicenses ()
         $('#review-text-fla #tmp-outbound-option-3-fsfe').addClass("nuke");
         $('#review-text-fla #tmp-outbound-option-4-non-fsfe').hide();
         $('#review-text-fla #tmp-outbound-option-4-non-fsfe').addClass("nuke");
-
+        // the same for the entity version
         $('#review-text-fla-entity #tmp-outbound-option-1-fsfe').show();
         $('#review-text-fla-entity #tmp-outbound-option-1-fsfe').removeClass("nuke");
         $('#review-text-fla-entity #tmp-outbound-option-2-fsfe').show();
@@ -782,28 +826,28 @@ function setOutboundOptionSameLicenses ()
         $('#review-text-fla-entity #tmp-outbound-option-3-fsfe').addClass("nuke");
         $('#review-text-fla-entity #tmp-outbound-option-4-non-fsfe').hide();
         $('#review-text-fla-entity #tmp-outbound-option-4-non-fsfe').addClass("nuke");
-
-    } else {
+    // for cla, disable the fsfe options and enable others
+    } else { // option 1
         $('#review-text #tmp-outbound-option-1-fsfe').hide();
         $('#review-text #tmp-outbound-option-1-fsfe').addClass("nuke");
         $('#review-text-entity #tmp-outbound-option-1-fsfe').hide();
         $('#review-text-entity #tmp-outbound-option-1-fsfe').addClass("nuke");
-
+        // option 2
         $('#review-text #tmp-outbound-option-2-fsfe').hide();
         $('#review-text #tmp-outbound-option-2-fsfe').addClass("nuke");
         $('#review-text-entity #tmp-outbound-option-2-fsfe').hide();
         $('#review-text-entity #tmp-outbound-option-2-fsfe').addClass("nuke");
-
+        // enable option 2 non-fsfe
         $('#review-text .tmp-outbound-option-2-non-fsfe').show();
         $('#review-text .tmp-outbound-option-2-non-fsfe').removeClass("nuke");
         $('#review-text-entity .tmp-outbound-option-2-non-fsfe').show();
         $('#review-text-entity .tmp-outbound-option-2-non-fsfe').removeClass("nuke");
-
+        // disable option 3 (there is only one for fsfe, no non-fsfe one)
         $('#review-text #tmp-outbound-option-3-fsfe').hide();
         $('#review-text #tmp-outbound-option-3-fsfe').addClass("nuke");
         $('#review-text-entity #tmp-outbound-option-3-fsfe').hide();
         $('#review-text-entity #tmp-outbound-option-3-fsfe').addClass("nuke");
-
+        // disable option 4
         $('#review-text #tmp-outbound-option-4-non-fsfe').hide();
         $('#review-text #tmp-outbound-option-4-non-fsfe').addClass("nuke");
         $('#review-text-entity #tmp-outbound-option-4-non-fsfe').hide();
@@ -811,11 +855,16 @@ function setOutboundOptionSameLicenses ()
     }
 }
 
+/*
+* This function sets the outbound option to license-policy.
+*/
+
   function setOutboundOptionLicensePolicy ()
 {
+    // sets the value of the license policy on the review tab to the value of the input on the copyright tab
     $("#review-outbound-licenses").html(
       $("#outbound-option-license-policy").val() );
-
+    // enable outbound paragraph 1
     $('#review-text-fla #tmp-outbound-option-1-fsfe').show();
     $('#review-text-fla #tmp-outbound-option-1-fsfe').removeClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-1-fsfe').show();
@@ -824,7 +873,7 @@ function setOutboundOptionSameLicenses ()
     $('#review-text #tmp-outbound-option-1-fsfe').removeClass("nuke");
     $('#review-text-entity #tmp-outbound-option-1-fsfe').show();
     $('#review-text-entity #tmp-outbound-option-1-fsfe').removeClass("nuke");
-
+    // disables outbound option 2 fsfe
     $('#review-text-fla #tmp-outbound-option-2-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-2-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-2-fsfe').hide();
@@ -833,7 +882,7 @@ function setOutboundOptionSameLicenses ()
     $('#review-text #tmp-outbound-option-2-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-2-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-2-fsfe').addClass("nuke");
-
+    // disables outbound paragraph 2 non-fsfe
     $('#review-text-fla #tmp-outbound-option-2-non-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-2-non-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-2-non-fsfe').hide();
@@ -842,7 +891,7 @@ function setOutboundOptionSameLicenses ()
     $('#review-text #tmp-outbound-option-2-non-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-2-non-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-2-non-fsfe').addClass("nuke");
-
+    // enable and show outbound option 3 (license policy) (there is no non-fsfe one)
     $('#review-text-fla #tmp-outbound-option-3-fsfe').show();
     $('#review-text-fla #tmp-outbound-option-3-fsfe').removeClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-3-fsfe').show();
@@ -851,12 +900,12 @@ function setOutboundOptionSameLicenses ()
     $('#review-text #tmp-outbound-option-3-fsfe').removeClass("nuke");
     $('#review-text-entity #tmp-outbound-option-3-fsfe').show();
     $('#review-text-entity #tmp-outbound-option-3-fsfe').removeClass("nuke");
-
+    // insert the license policy location into the text, from the input field. LicensePolicyLocation is populated in testCopyrightPage
     $('#review-text-fla #tmp-license-policy-location').html( LicensePolicyLocation );
     $('#review-text-fla-entity #tmp-license-policy-location').html( LicensePolicyLocation );
     $('#review-text #tmp-license-policy-location').html( LicensePolicyLocation );
     $('#review-text-entity #tmp-license-policy-location').html( LicensePolicyLocation );
-
+    // disable outbound option 4
     $('#review-text-fla #tmp-outbound-option-4-non-fsfe').hide();
     $('#review-text-fla #tmp-outbound-option-4-non-fsfe').addClass("nuke");
     $('#review-text-fla-entity #tmp-outbound-option-4-non-fsfe').hide();
@@ -865,7 +914,7 @@ function setOutboundOptionSameLicenses ()
     $('#review-text #tmp-outbound-option-4-non-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-4-non-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-4-non-fsfe').addClass("nuke");
-
+    // insert fsfeField into special outbound paragraph (#tmp-outbound-special) for patent licensing (promise to only license patents in so far as necessary for sublicensing and combination under specified licenses
     $('#review-text #tmp-licenses-2').html( fsfeField );
     $('#review-text-entity #tmp-licenses-2').html( fsfeField );
 
@@ -873,56 +922,59 @@ function setOutboundOptionSameLicenses ()
     putBackOrderOfSectionsAfterSection4();
 }
 
+/*
+ * Sets the outbound copyright option to the same license (as used on the submission date)
+ */
+
 function setOutboundOptionSame ()
 {
-
     /* remove the outbound-option in review */
     $("#review-outbound-licenses").html(
         $("#outbound-option-same").val() );
     configs['outbound-option'] = 'same';
 
-    /*
-    $("#review-outbound-license-options").html(
-        $("#outbound-option-same").val() );
-    */
-
+    // enable the outbound section
     $("#tmp-outbound-section-all").show();
     $("#tmp-outbound-section-all").removeClass("nuke");
-
+    // set the extra field in the outbound-special section to empty
     $('#review-text #tmp-licenses-2').html( emptyField );
     $('#review-text-entity #tmp-licenses-2').html( emptyField );
 
     /* put back order of sections after section 4 */
     putBackOrderOfSectionsAfterSection4();
-
+    // inserts into tmp-outbound-special
     fixPatentParagraph( 'the license or licenses that We ' +
                         'are using on the Submission Date' );
-
+    // disable outbound option 1
     $('#review-text #tmp-outbound-option-1-fsfe').hide();
     $('#review-text #tmp-outbound-option-1-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-1-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-1-fsfe').addClass("nuke");
-
+    // disable outbound option 2 fsfe
     $('#review-text #tmp-outbound-option-2-fsfe').hide();
     $('#review-text #tmp-outbound-option-2-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-2-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-2-fsfe').addClass("nuke");
-
+    // disable outbound option 2 non-fsfe
     $('#review-text #tmp-outbound-option-2-non-fsfe').hide();
     $('#review-text #tmp-outbound-option-2-non-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-2-non-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-2-non-fsfe').addClass("nuke");
-
+    // disable outbound option 3
     $('#review-text #tmp-outbound-option-3-fsfe').hide();
     $('#review-text #tmp-outbound-option-3-fsfe').addClass("nuke");
     $('#review-text-entity #tmp-outbound-option-3-fsfe').hide();
     $('#review-text-entity #tmp-outbound-option-3-fsfe').addClass("nuke");
-
+    // enable outbound option 4
     $('#review-text #tmp-outbound-option-4-non-fsfe').show();
     $('#review-text #tmp-outbound-option-4-non-fsfe').removeClass("nuke");
     $('#review-text-entity #tmp-outbound-option-4-non-fsfe').show();
     $('#review-text-entity #tmp-outbound-option-4-non-fsfe').removeClass("nuke");
 }
+
+/*
+ * This sets the outbound options so that no commitment for any specific licenses is defined
+ */
 
 function setOutboundOptionNoCommitment ()
 {
@@ -932,14 +984,7 @@ function setOutboundOptionNoCommitment ()
 
     configs['outbound-option'] = 'no-commitment';
 
-    /*
-    $("#review-outbound-license-options").html(
-        $("#outbound-option-no-commitment").val() );
-    */
-    
     /* remove entire section 4 */
-    // entire section hidden: fixPatentParagraph(); @TODO can this go?
-    // no multiple ids in one page... 
     $('.tmp-outbound-section').hide();
     $('.tmp-outbound-section').addClass("nuke");
 
@@ -960,7 +1005,7 @@ function setOutboundOptionNoCommitment ()
     $('#review-text #tmp-digit-misc-3').html( '8.3' );
     $('#review-text #tmp-digit-misc-4').html( '8.4' );
     $('#review-text #tmp-digit-misc-5').html( '8.5' );
-
+    // the same for the entity text
     $('#review-text-entity #tmp-digit-disclaimer').html( '4.' );
     $('#review-text-entity #tmp-digit-waiver').html( '5.' );
     $('#review-text-entity #tmp-digit-approx-waiver').html( '6.' );
@@ -977,13 +1022,16 @@ function setOutboundOptionNoCommitment ()
     $('#review-text-entity #tmp-digit-misc-3').html( '8.3' );
     $('#review-text-entity #tmp-digit-misc-4').html( '8.4' );
     $('#review-text-entity #tmp-digit-misc-5').html( '8.5' );
-
+    // hide special term-special section
     $('#review-text #tmp-term-special').hide();
     $('#review-text #tmp-term-special').addClass("nuke");
     $('#review-text-entity #tmp-term-special').hide();
     $('#review-text-entity #tmp-term-special').addClass("nuke");
 }
 
+/*
+ * This adjust the chooser position, based on the pos argument to the query string.
+ */
 
 function updatePosition ()
 {
@@ -1014,13 +1062,15 @@ function updatePosition ()
         console.log("pos: " + $.QueryString["pos"] );
 }
 
-
+/*
+ * These test functions partially validate the values entered, and partially prepare the final document.
+ * This one tests if data was entered into the requisite fields on the first page, and highlights input boxes with a thin
+ * red line if they contain no or wrong input.
+ */
 
 function testGeneralPage ()
 {
             isGeneralPageOk = true;
-            if(!$("#fsfe-compliance").val() );
-            var fsfeCompliance    = $( "#fsfe-compliance" ).val();
 
             if ( !$('#beneficiary-name').val() ) {
                 $('#beneficiary-name').addClass("cla-alert");
@@ -1053,32 +1103,35 @@ function testGeneralPage ()
                 $('#project-email').removeClass("cla-alert");
             }
 
-
             if ( !$('#project-jurisdiction').val() ) {
                 $('#project-jurisdiction').addClass("cla-alert");
                 isGeneralPageOk = false;
             } else {
                 $('#project-jurisdiction').removeClass("cla-alert");
             }
-
-            if ( !$('#fsfe-compliance').val() || $('#fsfe-compliance').val() == "no-fsfe-compliance" ) {
-                fsfeCompliance = "";
-
+            // FIXME this spelling is the only usage here. so likely it should be fixed or removed.
+            /*var something = $('#fsfe-compliance').val()
+            console.log(`fsfe-compliance general page ${something}`)
+            if ($('#fsfe-compliance').val() == 'fsfe-compliance'  ) {
+                fsfeCompliance = "fsfe-compliance"
+                console.log('fsfe compliance set on general page')
+            } else if ($('non-fsfe-compliance').val() || ) {
+                fsfeCompliance = "non-fsfe-compliance"
+                console.log('non-fsfe-compliance set on general page')
             } else {
-                if (fsfeCompliance == "fsfe-compliance") {
-                  if ( doDebug ) {
-                      console.log("fsfe-compliance: " +
-                              "FSFE Compliance Enabled");
-                            }
-                      }
-
-              }
+                console.log('neither fsfe or non-fsfe compliance set. this should probably never happen.')
+            } */
+    
 
 
     testReviewPage();
 
     return isGeneralPageOk;
 }
+
+/*
+ * This validates and prepares options on the copyright page.
+ */
 
 function testCopyrightPage ()
 {
@@ -1114,13 +1167,13 @@ function testCopyrightPage ()
                         outboundCopyrightLicenses);
             }
 
-            if ( !$('#license-policy-location').val() ) {
+           if ( !$('#license-policy-location').val() ) {
                 LicensePolicyLocation = "";
             } else {
                 LicensePolicyLocation = $('#license-policy-location').val();
             }
 
-
+            // FIXME
             /*
             if ( !$('#medialist').val() ) {
                 $('#medialist').addClass("cla-alert");
@@ -1140,6 +1193,10 @@ function testCopyrightPage ()
     return isCopyrightPageOk;
 }
 
+/*
+ * This validates and prepares options on the patent page (if any).
+ */
+
 function testPatentPage ()
 {
             isPatentPageOk = true;
@@ -1149,18 +1206,22 @@ function testPatentPage ()
             return isPatentPageOk;
 }
 
+/*
+ * This validates and prepares the review page, and creates the text of the agreement.
+ */
+
 function testReviewPage ()
 {
             isReviewPageOk = true;
 
             if ( doDebug)
                 console.log("At testReviewPage");
-
+            // This sets the document title
             $('#review-text-fla #tmp-title').html("Fiduciary License Agreement 2.0");
             $('#review-text-fla-entity #tmp-title').html("Fiduciary License Agreement 2.0");
             $('#review-text #tmp-title').html("Contributor Agreement");
             $('#review-text-entity #tmp-title').html("Contributor Agreement");
-
+            // This shows the subtitle FIXME some of this, like '#tmp-subtitle-based' could prob be removed b/c it is never not needed
             $('#review-text-fla #tmp-subtitle-based').show();
             $('#review-text-fla #tmp-subtitle-based').removeClass("nuke");
             $('#review-text-fla-entity #tmp-subtitle-based').show();
@@ -1169,13 +1230,13 @@ function testReviewPage ()
             $('#review-text #tmp-subtitle-based').addClass("nuke");
             $('#review-text-entity #tmp-subtitle-based').hide();
             $('#review-text-entity #tmp-subtitle-based').addClass("nuke");
-
+            // Sets whether it is an individual or entity based agreement
             $('#review-text-fla #tmp-contributor-type').html("Individual");
             $('#review-text-fla-entity #tmp-contributor-type').html("Entity");
             $('#review-text #tmp-contributor-type').html("Individual");
             $('#review-text-entity #tmp-contributor-type').html("Entity");
 
-
+            // if the beneficiary is empty, sets it to a blank field
             if ( !$("#beneficiary-name").val() )
             {
                 $("#review-beneficiary-name").html( emptyField );
@@ -1183,7 +1244,9 @@ function testReviewPage ()
                 $('#review-text-fla-entity #tmp-beneficiary-name').html( emptyField );
                 $('#review-text #tmp-beneficiary-name').html( emptyField );
                 $('#review-text-entity #tmp-beneficiary-name').html( emptyField );
+                // the empty field is save to the configs
                 configs['beneficiary-name'] = '';
+            // if a beneficiary is given, its name is inserted into the document
             } else {
                 $("#review-beneficiary-name").html(
                     $("#beneficiary-name").val() );
@@ -1191,9 +1254,11 @@ function testReviewPage ()
                 $('#review-text-fla-entity #tmp-beneficiary-name').html( $("#beneficiary-name").val() );
                 $('#review-text #tmp-beneficiary-name').html( $("#beneficiary-name").val() );
                 $('#review-text-entity #tmp-beneficiary-name').html( $("#beneficiary-name").val() );
+                // beneficiary name is save to the configs
                 configs['beneficiary-name'] = $("#beneficiary-name").val();
             }
 
+            // if no project name is given, it is set to a blank field in the document
             if ( !$("#project-name").val() )
             {
                 $("#review-project-name").html( emptyField );
@@ -1201,7 +1266,9 @@ function testReviewPage ()
                 $('#review-text-fla-entity #tmp-project-name').html( emptyField );
                 $('#review-text #tmp-project-name').html( emptyField );
                 $('#review-text-entity #tmp-project-name').html( emptyField );
+                // the project name is set to a blank field in the configs
                 configs['project-name'] = '';
+            // otherwise, the project-name field in the text is set to the project name entered
             } else {
                 $("#review-project-name").html(
                     $("#project-name").val() );
@@ -1209,41 +1276,46 @@ function testReviewPage ()
                 $('#review-text-fla-entity #tmp-project-name').html( $("#project-name").val() );
                 $('#review-text #tmp-project-name').html( $("#project-name").val() );
                 $('#review-text-entity #tmp-project-name').html( $("#project-name").val() );
+                // saving the project name to configs
                 configs['project-name'] = $("#project-name").val();
             }
-
+            // Disable the preamble by default in the agreement text
             $('#review-text #tmp-preamble').hide();
             $('#review-text #tmp-preamble').addClass("nuke");
             $('#review-text-entity #tmp-preamble').hide();
             $('#review-text-entity #tmp-preamble').addClass("nuke");
-
+            // In the how-to instructions of the agreements, set FLA or CA respectively
             $('#review-text-fla #tmp-how-to').html("FLA");
             $('#review-text-fla-entity #tmp-how-to').html("FLA");
             $('#review-text #tmp-how-to').html("Contributor Agreement");
             $('#review-text-entity #tmp-how-to').html("Contributor Agreement");
 
-            //
+            // Hide the entity definitions for FLA FIXME why also for FLA-entity?
             $('#review-text-fla #tmp-entity-definitions').hide();
             $('#review-text-fla-entity #tmp-entity-definitions').hide();
+            // For patent pledge (CLA=, show entity definitions
             if ( $( "#patent-type" ).val() == 'Patent-Pledge' ) {
                 $('#review-text .tmp-entity-definitions').show();
                 $('#review-text-entity .tmp-entity-definitions').show();
             }
+            // If CLA but no patent pledge, hide entity definitions
             else {
-                $('#review-text .tmp-entity-definitions').hide(); 
+                $('#review-text .tmp-entity-definitions').hide();
                 $('#review-text-entity .tmp-entity-definitions').hide();
              }
+            // if project website field is empty, replace it with a blank line
             if ( !$("#project-website").val() )
             {
                 $("#review-project-website").html( emptyField );
                 configs['project-website'] = '';
+            // if project-website is not empty, insert it into the text
             } else
             {
                 $("#review-project-website").html(
                     $("#project-website").val() );
                 configs['project-website'] = $("#project-website").val();
             }
-
+            // if the project email is, empty, set a blank line 
             if ( !$("#project-email").val() )
             {
                 $("#review-project-email").html( emptyField );
@@ -1253,6 +1325,7 @@ function testReviewPage ()
                 $('#review-text-entity #tmp-project-email').html( emptyField );
                 configs['project-email'] = '';
             } else
+            // if the project-email is not empty, insert it into the text
             {
                 $("#review-project-email").html(
                     $("#project-email").val() );
@@ -1262,7 +1335,7 @@ function testReviewPage ()
                 $('#review-text-entity #tmp-project-email').html( $("#project-email").val() );
                 configs['project-email'] = $("#project-email").val();
             }
-
+            // if the contributor-process-url is empty, insert a blank line in its place
             if ( !$("#contributor-process-url").val() )
             {
                 $("#review-contributor-process-url").html( emptyField );
@@ -1271,6 +1344,7 @@ function testReviewPage ()
                 $('#review-text #tmp-submission-instructions').html( emptyField );
                 $('#review-text-entity #tmp-submission-instructions').html( emptyField );
                 configs['process-url'] = '';
+            // if the process-url is not empty, insert the value into the agreement text
             } else {
                 $("#review-contributor-process-url").html(
                     $("#contributor-process-url").val() );
@@ -1281,7 +1355,7 @@ function testReviewPage ()
                 configs['process-url'] =
                     $("#contributor-process-url").val();
             }
-
+            // if the project-jurisdiction is empty, insert a blank line
             if ( !$("#project-jurisdiction").val() )
             {
                 $("#review-project-jurisdiction").html( emptyField );
@@ -1290,6 +1364,7 @@ function testReviewPage ()
                 $('#review-text #tmp-project-jurisdiction').html( emptyField );
                 $('#review-text-entity #tmp-project-jurisdiction').html( emptyField );
                 configs['project-jurisdiction'] = '';
+            // else, insert the value of project-jurisdiction into the text
             } else{
                 $("#review-project-jurisdiction").html(
                     $("#project-jurisdiction").val() );
@@ -1305,7 +1380,7 @@ function testReviewPage ()
                     $("#project-jurisdiction").val();
             }
 
-
+//TODO / FIXME
             /* FSFE Compliance */
             /* if ( !$("#fsfe-compliance").val() || $("#fsfe-compliance").val() == 'No FSFE Compliance' )
             {
@@ -1327,6 +1402,9 @@ function testReviewPage ()
 
             /* Agreement (Non)Exclusivity */
 
+            // This replaces the lower case agreement-exclusivity with the upper case version
+            // FIXME why is this method used here (and for patent license type), instead of the alternative methods like just replacing a fixed string?
+            // If possible, remove this method to reduce complexity (or replace the other methods)
             var cleanVersion = '';
             if ( $("#agreement-exclusivity").val() in dictionary )
             {
@@ -1347,6 +1425,7 @@ function testReviewPage ()
             configs['agreement-exclusivity'] =
                 $("#agreement-exclusivity").val();
 
+            // If there is an exclusive outbound copyright license, activate the requisite options
             if ( $("#agreement-exclusivity").val() == 'exclusive' )
             {
                 $('#review-text-fla #tmp-contributor-exclusivity-2').html("exclusive");
@@ -1357,7 +1436,7 @@ function testReviewPage ()
                 $('#review-text #tmp-license-back').removeClass("nuke");
                 $('#review-text-entity #tmp-license-back').show();
                 $('#review-text-entity #tmp-license-back').removeClass("nuke");
-
+            // if there is no outbound exclusive copyright license, activate the respective options
             } else {
                 $('#review-text #tmp-contributor-exclusivity-2').html("NON-exclusive");
                 $('#review-text-entity #tmp-contributor-exclusivity-2').html("NON-exclusive");
@@ -1367,58 +1446,63 @@ function testReviewPage ()
                 $('#review-text-entity #tmp-license-back').addClass("nuke");
             }
 
+            // inserts the fsfeField into the possivble licenses FIXME - if this is not even checked, why is this not fixed in text?
             $('#review-text-fla #tmp-licenses-2').html( fsfeField );
             $('#review-text-fla-entity #tmp-licenses-2').html( fsfeField );
-
+            // If not outbound copyright licenses are set, insert a blank space into the text
             if ( !outboundCopyrightLicenses ) {
                 $('#review-text-fla #tmp-licenses-fsfe').html( emptyField );
                 $('#review-text-fla-entity #tmp-licenses-fsfe').html( emptyField );
                 $('#review-text #tmp-licenses-non-fsfe').html( emptyField );
                 $('#review-text-entity #tmp-licenses-non-fsfe').html( emptyField );
-
+            // else, insert the list of possible licenses into the agreement text
             } else {
                 $('#review-text-fla #tmp-licenses-fsfe').html( outboundCopyrightLicenses );
                 $('#review-text-fla-entity #tmp-licenses-fsfe').html( outboundCopyrightLicenses );
                 $('#review-text #tmp-licenses-non-fsfe').html( outboundCopyrightLicenses );
                 $('#review-text-entity #tmp-licenses-non-fsfe').html( outboundCopyrightLicenses );
             }
-
+            // if option 1 (fsfe approved licenses) is selected for outbound licenses, set the outbound options as appropriate
             if ( $("#outbound-option-fsfe").prop("checked") )
                 setOutboundOptionFsfe();
-
+            // if option 2 (list of licenses) is selected for outbound licenses, call the requisite function
             if ( $("#outbound-option-same-licenses").prop("checked") )
                 setOutboundOptionSameLicenses();
-
+            // if option 3 (license policy) is selected for outbound licenses, set the appropriate text options
             if ( $("#outbound-option-license-policy").prop("checked") )
                 setOutboundOptionLicensePolicy();
-
+            // if option 4 (same licenses as on submission date) is selected, set the appropriate options
             if ( $("#outbound-option-same").prop("checked") )
                 setOutboundOptionSame();
 
-            // outbound-option-no-commitment
+            // if outbound-option-no-commitment is used, call the appropriate function
             if ( $("#outbound-option-no-commitment").prop("checked") )
                 setOutboundOptionNoCommitment();
 
-
+            // set the outbound custom list of outbound licenses in the document text / FIXME why is this not checked / done only if enabled?
             $("#review-outbound-license-other").html(
                 $("#outboundlist-custom").val() );
+            // sets the config to the requisite list of licenses
             configs['outboundlist-custom'] = $("#outboundlist-custom").val();
 
+            // set the lise of media licenses in the document text
             $("#review-media-licenses").html(
                 mediaLicenses );
             configs['medialist'] = mediaLicenses;
 
+            // hide the media licenses part in the text for FLA versions
             $('#review-text-fla #tmp-outbound-media-license').hide();
             $('#review-text-fla #tmp-outbound-media-license').addClass("nuke");
             $('#review-text-fla-entity #tmp-outbound-media-license').hide();
             $('#review-text-fla-entity #tmp-outbound-media-license').addClass("nuke");
-
+            // for non FLA, if no media license(s) are set, also hide the media license part in the text
             if ( mediaLicenses == "None" ) {
                 $('#review-text #tmp-outbound-media-license').hide();
                 $('#review-text #tmp-outbound-media-license').addClass("nuke");
                 $('#review-text-entity #tmp-outbound-media-license').hide();
                 $('#review-text-entity #tmp-outbound-media-license').addClass("nuke");
             } else {
+            // if media license(s) are set, insert the list into the agreement text
                 if ( mediaLicenses == "" )
                     mediaLicenses = emptyField;
                 $('#review-text #tmp-media-licenses').html(
@@ -1431,7 +1515,7 @@ function testReviewPage ()
                 $('#review-text-entity #tmp-outbound-media-license').removeClass("nuke");
             }
 
-
+            // this replaces uppercase with lower case iirc. FIXME similar to above, is this necessary?
             var cleanVersion = '';
             if ( $("#patent-type").val() in dictionary )
             {
@@ -1450,21 +1534,22 @@ function testReviewPage ()
             $('#review-text-entity #tmp-patent-option').html( cleanVersion );
 
             configs['patent-option'] = $("#patent-type").val();
-
+            // In case a traditional patent license is selected, enable the particular options in the text
             if ( $("#patent-type").val() == 'Traditional' )
-            {
+            {   // for FLA individual and entity
                 $('#review-text-fla #tmp-patent-option-pledge').hide();
                 $('#review-text-fla #tmp-patent-option-pledge').addClass("nuke");
                 $('#review-text-fla-entity #tmp-patent-option-pledge').hide();
                 $('#review-text-fla-entity #tmp-patent-option-pledge').addClass("nuke");
 
+                // for CLA individual
                 $('#review-text #tmp-patent-option-traditional').show();
                 $('#review-text #tmp-patent-option-traditional').removeClass("nuke");
                 $('#review-text #tmp-patent-option-pledge').hide();
                 $('#review-text #tmp-patent-option-pledge').addClass("nuke");
                 $('#review-text #tmp-outbound-special').show();
                 $('#review-text #tmp-outbound-special').removeClass("nuke");
-
+                // for CLA entity
                 $('#review-text-entity #tmp-patent-option-traditional').show();
                 $('#review-text-entity #tmp-patent-option-traditional').removeClass("nuke");
                 $('#review-text-entity #tmp-patent-option-pledge').hide();
@@ -1473,6 +1558,7 @@ function testReviewPage ()
                 $('#review-text-entity #tmp-outbound-special').removeClass("nuke");
 
             } else {
+                // if no traditional patent license is selected, hide the requisite options in the text
                 $('#review-text #tmp-patent-option-traditional').hide();
                 $('#review-text #tmp-patent-option-traditional').addClass("nuke");
                 $('#review-text #tmp-patent-option-pledge').show();
@@ -1495,6 +1581,10 @@ function testReviewPage ()
             return isReviewPageOk;
 }
 
+/*
+ * This validates the apply page, and generates the html, markdown and link to show.
+ */
+
 function testApplyPage ()
 {
     if ( doDebug)
@@ -1503,7 +1593,7 @@ function testApplyPage ()
     isApplyPageOk = true;
 
     /* NEED TO REVIEW AFTER DECISIONS */
-    /*
+    /* FIXME can probably be deleted as this should always be shown from what I know
     if ( $("#contributor-option-entity").prop("checked") )
     {
         $("#apply-individual").hide();
@@ -1525,30 +1615,28 @@ function testApplyPage ()
     finalQueryString = $.param(configs);
     if ( doDebug)
         console.log("finalQueryString: " + finalQueryString);
-    // set final linkto be used in the interface
-
-
-
-
+    // set final link to be used in the interface
     // EXAMPLE:
     // http://service.fabricatorz.com/query2form/?_replyto=project@rejon.org&_subject=Contributor%20License%20Agreement%20E-Signing%20Process&_body=Fill%20out%20the%20following%20form,%20then%20sign%20your%20initials%20to%20complete%20the%20Contributor%20License%20Agreement.&fullname=&Title=&Company=&email-address=&Physical-address=&Sign-with-your-initials=&_submit=sign
-
-
 
 
     var finalLink = document.URL.substr(0,document.URL.lastIndexOf('/')) +
                     "/?" +
                     finalQueryString;
-    // console.log("finalLink: " + finalLink);
+    if ( doDebug )
+        console.log("finalLink: " + finalLink);
 
+    // if the project email is not empty, encode FIXME u2s service might still be broken
     if ( "" != configs["project-email"] )
     {
         var encoded_uri = encodeURIComponent(finalLink);
         shortUrl = getShortUrl(encoded_uri);
+    // or use a blank shortUrl
     } else {
         shortUrl = '';
     }
 
+    // This generates the links/urls for the e-signing form
     updateQuery4Form();
 
     if ( ! $('#contributor-process-url').val() )
@@ -1558,20 +1646,23 @@ function testApplyPage ()
             if ( '1337' == debugNeedle )
                 updateTestUrls();
 
+            // the short or long form query is loaded
             var queryReady =
                 (( "" != query4form_short ) ? query4form_short : query4form );
 
+            // adjust the e-sign button and insert text for sharing
             $("#link-esign").attr("href", queryReady);
             $("#link-esign").addClass('btn-success');
             $("#link-esign").removeClass('btn-danger');
             $("#link-esign").html("Link to E-Signing Form");
+            // FIXME (remove) This is the same text as in index html
             $("#signing-service").html('<b>Contributor Agreements</b>: ' +
                 'Share the link with your contributors.');
 
             $("#embed-esign").html( getEmbedCode( queryReady ) );
             $("#embedding-service-all").show();
 
-
+        // FIXME same
         } else {
             $("#link-esign").html( 'Need Project Email' );
             $("#link-esign").removeClass('btn-success');
@@ -1581,6 +1672,7 @@ function testApplyPage ()
 
             $("#embedding-service-all").hide();
         }
+    // This set the sharing text to a different one mentioning the process url
     } else {
         $("#link-esign").attr("href", $('#contributor-process-url').val());
         $("#link-esign").addClass('btn-success');
@@ -1595,46 +1687,49 @@ function testApplyPage ()
     }
 
 
-    // make sure short file parameter shows up in emails, and form
-    //
-    // and then also update page
-    // a final step will be to make sure that has SIGNED a doc
-    // that the final PDF and HTML will be signed and attached to email
-
+   // sets the final link to short url or to the long url 
     var tmpFinalLink = '';
     if ( "" == shortUrl )
         tmpFinalLink = finalLink;
     else
         tmpFinalLink = shortUrl;
-
+    // inserts the final link into all relevant link buttons
     $(".final-link").attr("href", finalLink );
 
+    // This section is added to the bottom of the texts
     var finalBrew =
         '<section class="recreate"><h4>Recreate this Contributor License Agreement</h4>\n' +
         '<p><a href="' + tmpFinalLink + '">' + tmpFinalLink + '</p>' + "\n" +
         "</section>\n";
     // console.log("finalBrew: " + finalBrew);
 
+    // These concatenate the generated agreement text and add the bottom part from finalBrew and remove the elements with nuke class
+    // First one for cla
+    // FIXME where are the .htmlstore classes coming from? 
     $("#embed-offscreen").html( $( "#review-text" ).html() + finalBrew );
     $(".htmlstore-individual").val( $( "#review-text-style" ).html() +
                          $( "#review-text" ).html() +
                          finalBrew );
+    // remove all agreement parts with the nuke class
     $("#embed-offscreen .nuke").remove();
 
+    // generate text for cla-entity and remove elements with nuke class
     $("#embed-offscreen-entity").html(
         $( "#review-text-entity" ).html() + finalBrew );
     $(".htmlstore-entity").val( $( "#review-text-style" ).html() +
                          $( "#review-text-entity" ).html() +
                          finalBrew );
     $("#embed-offscreen-entity .nuke").remove();
-
+    
+    // generate offscreen text for fla and remove elements with .nuke class
     $("#embed-offscreen-fla").html(
         $( "#review-text-fla" ).html() + finalBrew );
-    $(".htmlstore-fla").val( $( "#review-text-style" ).html() + 
+    $(".htmlstore-fla").val( $( "#review-text-style" ).html() +
                          $( "#review-text-fla" ).html() +
                          finalBrew );
     $("#embed-offscreen-fla .nuke").remove();
 
+    // generate text for fla entity and remove elements with the nuke class
     $("#embed-offscreen-fla-entity").html(
         $( "#review-text-fla-entity" ).html() + finalBrew );
     $(".htmlstore-fla-entity").val( $( "#review-text-style" ).html() + 
@@ -1658,6 +1753,10 @@ function testApplyPage ()
     return isApplyPageOk;
 }
 
+/*
+ * This runs all the page functions. As some are called from each other, they will run at least twice. Because the others call testReviewPage, and testReviewPage call testApplyPage. FIXME
+ */
+
 function testAllPages()
 {
     testGeneralPage();
@@ -1667,9 +1766,13 @@ function testAllPages()
     testApplyPage();
 }
 
+/*
+ * If a project email is configured, this function updates the esign url to either a the q2f url or an anchor. Only used for debugging.
+ */
+
 function updateTestUrls ()
 {
-    
+
     if ( configs['project-email'] )
         $("#link-esign").attr("href", serviceUrl + '/query2form');
     else
@@ -1677,6 +1780,9 @@ function updateTestUrls ()
 
 }
 
+/*
+ * Entry point on document load. (main)
+ */
 
 $(document).ready(function() {
 
@@ -1687,31 +1793,13 @@ $(document).ready(function() {
         setFakeData();
     updateConfigs();
 
+    // if the debug needle is set, this sets the esign url with updateTestUrls()
+
     if ( '1337' == debugNeedle )
         updateTestUrls();
 
 
-
-
-    $("#patent-option-2-options").hide();
-
-
-    $("#html2pdf-individual").click(function() {
-        $('#html2pdf-form-individual').submit();
-    });
-
-    $("#html2pdf-entity").click(function() {
-        $('#html2pdf-form-entity').submit();
-    });
-    $("#html2pdf-fla").click(function() {
-        $('#html2pdf-form-fla').submit();
-    });
-
-    $("#html2pdf-fla-entity").click(function() {
-        $('#html2pdf-form-fla-entity').submit();
-    });
-
-    // @TODO need to make these each test each input, not ALL inputs
+    // These are meant to update the configs or run functions if an input field changes. FIXME Only some are used.
     $( "#beneficiary-name" ).change(function() {
         // return testGeneralPage();
     });
@@ -1751,14 +1839,18 @@ $(document).ready(function() {
         return testCopyrightPage();
     });
 
-    //@TODO this prop needs to trigger config
-    $("#fsfe-compliance").button("toggle");
-    selectFsfeCompliance();
+    // This sets the default FSFE compliant status by default
+    $("#fsfe-compliance").button("toggle"); // this is needed to set the default button to the green fsfe compliance
+    selectFsfeCompliance(); // this is needed for fsfe compliance to activate / ui changes to happen without clicking the fsfe button
 
+    // this should prob be under general page (and maybe use change for consistency)
     $( "#fsfe-compliance").click(function() {
         selectFsfeCompliance();
     });
 
+    /*
+     * Select all options for FSFE Compliance. FIXME should this be here or under testGeneral page or similar at least not directly after document load.
+     */
     function selectFsfeCompliance ()
     {
         $("#agreement-exclusivity-fsfe").show();
@@ -1786,9 +1878,14 @@ $(document).ready(function() {
         $("#apply-fla-entity").show();
     }
 
+    // FIXME is this needed here? Is there a better place for it? 
     $( "#non-fsfe-compliance").click(function () {
         selectNonFsfeCompliance();
     });
+
+    /*
+     * Select the options for non-fsfe compliance
+     */
 
     function selectNonFsfeCompliance ()
     {
@@ -1806,6 +1903,7 @@ $(document).ready(function() {
         changeMediaList();
         $("#patent-type-non-fsfe").show();
         $("#patent-type-fsfe").hide();
+        // FIXME Probably remove adding patent pledge here, as it then exists double
         $('<option id="patent-pledge" value="Patent-Pledge">Identified Patent Pledge</option>').appendTo("#patent-type");
         $('select[name*="patent-type"] option[value="Traditional"]').prop('selected', true);
         $("#review-media-licenses-line").show();
@@ -1819,6 +1917,10 @@ $(document).ready(function() {
         $("#apply-fla-entity").hide();
     }
 
+    /*
+     * This function shows the media list for CLA (non-fsfe) and hides it for FLA (fsfe)
+     */
+
     function changeMediaList () {
         if ( $("#fsfe-compliance").hasClass('active') ) {
             $("#medialist-label").hide();
@@ -1830,6 +1932,11 @@ $(document).ready(function() {
         }
     }
 
+    /*
+     * When the outbound outobound-option-fsfe is changed (outbound copyright option), this function hides the list of possible licenses, the field for custom lists and the license policy location field.
+     * Then it changes the media list, hiding or showing it depending on whether fsfe compliance is active or not
+     */
+
     $( "#outbound-option-fsfe" ).change(function() {
         $("#outboundlist").hide();
         $("#outboundlist-custom").hide();
@@ -1838,8 +1945,16 @@ $(document).ready(function() {
         // return testGeneralPage();
     });
 
+    /*
+    * On changing the outbound-option same licenses, show relevant UI elements
+    * FIXME This is the same for both, so should be reduced
+    */
+
     $( "#outbound-option-same-licenses" ).change(function() {
         if ( $("#fsfe-compliance").hasClass('active') && $("#outbound-option-same-licenses").prop( "checked" ) ) {
+
+
+
             $("#outboundlist").show();
             $("#outboundlist-custom").hide();
         }
@@ -1852,12 +1967,20 @@ $(document).ready(function() {
         // return testGeneralPage();
     });
 
+    /*
+     * On changing the outbound-option to license policy, this displays the requisite UI elements
+     */
+
     $( "#outbound-option-license-policy" ).change(function() {
       $("#outboundlist").hide();
       $("#outboundlist-custom").hide();
       $("#license-policy-location").show();
       changeMediaList();
     });
+
+    /*
+     * On changing the outbound option to same license, adjust the UI elements
+     */
 
     $( "#outbound-option-same" ).change(function() {
         $("#outboundlist").hide();
@@ -1866,6 +1989,10 @@ $(document).ready(function() {
         changeMediaList();
         // return testGeneralPage();
     });
+
+    /*
+     * On selecting the outbound no-commitment option, adjust the requisite UI elements
+     */
 
     $( "#outbound-option-no-commitment" ).change(function() {
         $("#outboundlist").hide();
@@ -1876,6 +2003,9 @@ $(document).ready(function() {
         // return testGeneralPage();
     });
 
+    /*
+     * On selecting the patent type patent-pledge, disable or hide the patent options
+     */
 
     $( "#patent-type" ).change(function() {
         if ( $( "#patent-type" ).val() == 'Patent-Pledge' )
@@ -1884,6 +2014,10 @@ $(document).ready(function() {
             $("#patent-option-2-options").hide();
 
     });
+
+    /*
+     * On clicking the e-sign link, if the project email is empty, disable the link and change the color of the esign button
+     */
 
     $( "#link-esign" ).click(function() {
         if ( "" == configs["project-email"] )
@@ -1895,6 +2029,10 @@ $(document).ready(function() {
         }
     });
 
+    /*
+     * On a chnage in the esign button, update the q4f and set the link
+     */
+
     $( "#link-esign" ).change(function() {
             updateQuery4Form();
             $("#link-esign").attr("href",
@@ -1905,6 +2043,9 @@ $(document).ready(function() {
 
     });
 
+    /*
+     * This function sets up the main wizard structure
+     */
 
 	$('#rootwizard').bootstrapWizard({onNext: function(tab, navigation, index)
     {
@@ -1949,13 +2090,18 @@ $(document).ready(function() {
                 return true;
                 break;
         }
-
+    /*
+     * When a wizard tab is displayed, the index and the size are adjusted.
+     */
     }, onTabShow: function(tab, navigation, index) {
         var $total = navigation.find('li').length;
         var $current = index+1;
         var $percent = ($current/$total) * 100;
         $('#rootwizard').find('.bar').css({width:$percent+'%'});
 	},
+    /*
+     * On clicking a tab all pages are processed
+     */
     onTabClick: function(tab, navigation, index)
     {
         testAllPages();
@@ -1965,6 +2111,7 @@ $(document).ready(function() {
 
     );
 
+    // update the wizard position and based on the action in the url, switch to the requisite signing page
     updatePosition();
     if ( $.QueryString["action"] )
     {
@@ -2009,7 +2156,5 @@ $(document).ready(function() {
                 break;
         }
     }
-
-    window.prettyPrint && prettyPrint()
 
 });
