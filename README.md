@@ -85,21 +85,15 @@ The location of the microservices (https://github.com/contributoragreements/serv
 
   ```
   {
-      "serviceUrl": "https://contributoragreements.org",
-      "urlShortener": "https://contributoragreements.org/u2s"
+      "serviceUrl": "http://contributoragreements.org",
+      "urlShortener": "http://contributoragreements.org/u2s"
   }
   ```
 
-## Local testing
-
-In the root directory, run `npm start` to start a local webserver to server the project.
-
 ## Further development
-
 Ideas for further development can be found in the issues and pull requests of this repo and in the forks of this repo. We welcome any questions and PRs.
 
 https://github.com/contributoragreements/ca-cla-chooser/issues?q=is%3Aopen+is%3Aissue
-
 
 ## Contact
 
