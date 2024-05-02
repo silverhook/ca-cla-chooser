@@ -20,7 +20,7 @@ describe('The length of each document version should be correct', async function
         console.log(`the type of t is: ${typeof t}`)
         console.log(`The FLA length is: ${l}`)
         console.log(`The beginning of the text is ${t.slice(0, 24)}`)
-        await expect(l).to.equal(17019);
+        await expect(l).to.equal(17079);
 
     });
 
@@ -29,7 +29,7 @@ describe('The length of each document version should be correct', async function
         await expect(agreementPage.applyResultHtmlFlaEntityText).to.exist;
         let l = await agreementPage.getHtmlFlaEntityTextLength();
         console.log(`The FLA Entity length is: ${l}`);
-        await expect(l).to.equal(17015);
+        await expect(l).to.equal(17075);
     });
 
     it('the fla version with outbound option 1 should be correct', async function() {
@@ -49,7 +49,7 @@ describe('The length of each document version should be correct', async function
         await expect(agreementPage.applyResultHtmlClaText).to.exist;
         let l = await agreementPage.getHtmlClaTextLength();
         console.log(`The CLA length is: ${l}`)
-        await expect(l).to.equal(15531);
+        await expect(l).to.equal(15591);
 
     });
 
@@ -104,7 +104,7 @@ describe('The length of each document version should be correct', async function
         await expect(agreementPage.applyResultHtmlClaEntityText).to.exist;
         let l = await agreementPage.getHtmlClaEntityTextLength();
         console.log(`The CLA Entity length is: ${l}`)
-        await expect(l).to.equal(15527);
+        await expect(l).to.equal(15587);
 
     });
     it('the query url without special options should have the same value', async function() {
