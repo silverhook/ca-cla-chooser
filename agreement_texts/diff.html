@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>diff</title>
+<meta name="Generator" content="Vim/9.1">
+<meta name="plugin-version" content="vim9.0_v2">
+<meta name="settings" content="number_lines,whole_filler,use_css,no_foldcolumn,expand_tabs,line_ids,prevent_copy=,use_input_for_pc=none">
+<meta name="colorscheme" content="solarized8">
+<style>
+<!--
+pre { font-family: monospace; color: #93a1a1; background-color: #002b36; }
+body { font-family: monospace; color: #93a1a1; background-color: #002b36; }
+* { font-size: 1em; }
+.Folded { color: #839496; background-color: #073642; padding-bottom: 1px; font-weight: bold; }
+.LineNr { color: #657b83; background-color: #073642; padding-bottom: 1px; }
+.DiffText { color: #268bd2; background-color: #073642; padding-bottom: 1px; }
+.DiffAdd { color: #859900; background-color: #073642; padding-bottom: 1px; }
+.DiffChange { color: #b58900; background-color: #073642; padding-bottom: 1px; }
+.DiffDelete { color: #dc322f; background-color: #073642; padding-bottom: 1px; font-weight: bold; }
+-->
+<!--
+table { table-layout: fixed; }
+html, body, table, tbody { width: 100%; margin: 0; padding: 0; }
+table, td, th { border: 1px solid; }
+td { vertical-align: top; }
+th, td { width: 50.0%; }
+td div { overflow: auto; }
+-->
+</style>
+<script>
+<!--
+
+/* function to open any folds containing a jumped-to line before jumping to it */
+function JumpToLine()
+{
+  var lineNum;
+  lineNum = window.location.hash;
+  lineNum = lineNum.substr(1); /* strip off '#' */
+
+  if (lineNum.indexOf('L') == -1) {
+    lineNum = 'L'+lineNum;
+  }
+  if (lineNum.indexOf('W') == -1) {
+    lineNum = 'W1'+lineNum;
+  }
+  var lineElem = document.getElementById(lineNum);
+  /* Always jump to new location even if the line was hidden inside a fold, or
+   * we corrected the raw number to a line ID.
+   */
+  if (lineElem) {
+    lineElem.scrollIntoView(true);
+  }
+  return true;
+}
+if ('onhashchange' in window) {
+  window.onhashchange = JumpToLine;
+}
+
+-->
+</script>
+</head>
+<body onload='JumpToLine();'>
+<table id='vimCodeElement'>
+<tr>
+<th>cla-nonexcl-outbound1-patlic-indiv.txt</th>
+<th>cla-nonexcl-outbound2-apache2-fancylicense-patlic-indiv.txt</th>
+</tr><tr>
+<td><div>
+<pre>
+<span id="W1L1" class="Folded"> 1 </span><span class="Folded">+-- 42 Zeilen: Contributor Agreement-------------------------------------------------------------------------------------------------</span>
+<span id="W1L43" class="LineNr">43 </span>Subject to the terms and conditions of this Agreement You hereby grant to Us and to recipients of Materials distributed by Us a worldwide, royalty-free, non-exclusive, perpetual and irrevocable (except as stated in Section 3.2) patent license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, to make, have made, use, sell, offer for sale, import and otherwise transfer the Contribution and the Contribution in combination with any Material (and portions of such combination). This license applies to all patents owned or controlled by You, whether already acquired or hereafter acquired, that would be infringed by making, having made, using, selling, offering for sale, importing or otherwise transferring of Your Contribution(s) alone or by combination of Your Contribution(s) with any Material.
+<span id="W1L44" class="LineNr">44 </span>3.2 Revocation of patent license
+<span id="W1L45" class="LineNr">45 </span>
+<span id="W1L46" class="LineNr">46 </span>You reserve the right to revoke the patent license stated in section 3.1 if We make any infringement claim that is targeted at your Contribution and not asserted for a Defensive Purpose. An assertion of claims of the Patents shall be considered for a &quot;Defensive Purpose&quot; if the claims are asserted against an entity that has filed, maintained, threatened, or voluntarily participated in a patent infringement lawsuit against Us or any of Our licensees.
+<span id="W1L47" class="LineNr">47 </span>4. License obligations by Us
+<span id="W1L48" class="LineNr">48 </span>
+<span id="W1L49" class="LineNr">49 </span><span class="DiffChange">We agree to </span><span class="DiffText">(sub)license the Contribution or any Materials containing, based on or derived from your Contribution under the terms of any licenses the Free Software Foundation classifies as Free Software License and which are approved by the Open Source Initiative as Open Source licenses</span><span class="DiffChange">.</span>
+<span id="W1L50" class="LineNr">50 </span>
+<span id="W1L51" class="LineNr">51 </span>In addition, We may use the following licenses for Documentation in the Contribution: GFDL-1.1 (including any right to adopt any future version of a license).
+<span id="W1L52" class="LineNr">52 </span>
+<span id="W1L53" class="LineNr">53 </span><span class="DiffChange">We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms of </span><span class="DiffText">any licenses the Free Software Foundation classifies as Free Software licenses and which are approved by the Open Source Initiative as Open Source licenses.</span><span class="DiffChange">.</span>
+<span id="W1L54" class="LineNr">54 </span>5. Disclaimer
+<span id="W1L55" class="LineNr">55 </span>
+<span id="W1L56" class="LineNr">56 </span>THE CONTRIBUTION IS PROVIDED &quot;AS IS&quot;. MORE PARTICULARLY, ALL EXPRESS OR IMPLIED WARRANTIES INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTY OF SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE EXPRESSLY DISCLAIMED BY YOU TO US AND BY US TO YOU. TO THE EXTENT THAT ANY SUCH WARRANTIES CANNOT BE DISCLAIMED, SUCH WARRANTY IS LIMITED IN DURATION AND EXTENT TO THE MINIMUM PERIOD AND EXTENT PERMITTED BY LAW.
+<span id="W1L57" class="LineNr">57 </span>
+<span id="W1L58" class="LineNr">58 </span>6. Consequential damage waiver
+<span id="W1L59" class="LineNr">59 </span>
+<span id="W1L60" class="Folded">60 </span><span class="Folded">+-- 32 Zeilen: TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL YOU OR WE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF ANTICIPATED SAVINGS, LOSS OF DATA, INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL AND EXEMPLARY DAMAGES ARISING OUT OF THIS AGREEMENT REGARDLESS OF THE LEGAL OR EQUITABLE THEORY (CONTRACT, TORT OR OTHERWISE) UPON WHICH THE CLAIM IS BASED.</span>
+</pre>
+</div></td>
+<td><div>
+<pre>
+<span id="W2L1" class="Folded"> 1 </span><span class="Folded">+-- 42 Zeilen: Contributor Agreement-------------------------------------------------------------------------------------------------</span>
+<span id="W2L43" class="LineNr">43 </span>Subject to the terms and conditions of this Agreement You hereby grant to Us and to recipients of Materials distributed by Us a worldwide, royalty-free, non-exclusive, perpetual and irrevocable (except as stated in Section 3.2) patent license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, to make, have made, use, sell, offer for sale, import and otherwise transfer the Contribution and the Contribution in combination with any Material (and portions of such combination). This license applies to all patents owned or controlled by You, whether already acquired or hereafter acquired, that would be infringed by making, having made, using, selling, offering for sale, importing or otherwise transferring of Your Contribution(s) alone or by combination of Your Contribution(s) with any Material.
+<span id="W2L44" class="LineNr">44 </span>3.2 Revocation of patent license
+<span id="W2L45" class="LineNr">45 </span>
+<span id="W2L46" class="LineNr">46 </span>You reserve the right to revoke the patent license stated in section 3.1 if We make any infringement claim that is targeted at your Contribution and not asserted for a Defensive Purpose. An assertion of claims of the Patents shall be considered for a &quot;Defensive Purpose&quot; if the claims are asserted against an entity that has filed, maintained, threatened, or voluntarily participated in a patent infringement lawsuit against Us or any of Our licensees.
+<span id="W2L47" class="LineNr">47 </span>4. License obligations by Us
+<span id="W2L48" class="LineNr">48 </span>
+<span id="W2L49" class="LineNr">49 </span><span class="DiffChange">We agree to </span><span class="DiffText">license the Contribution only under the terms of the following license(s) Apache-2.0, Fancy License (including any right to adopt any future version of a license if permitted)</span><span class="DiffChange">.</span>
+<span id="W2L50" class="LineNr">50 </span>
+<span id="W2L51" class="LineNr">51 </span>In addition, We may use the following licenses for Documentation in the Contribution: GFDL-1.1 (including any right to adopt any future version of a license).
+<span id="W2L52" class="LineNr">52 </span>
+<span id="W2L53" class="LineNr">53 </span><span class="DiffChange">We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms of </span><span class="DiffText">the following Apache-2.0, Fancy License license(s)</span><span class="DiffChange">.</span>
+<span id="W2L54" class="LineNr">54 </span>5. Disclaimer
+<span id="W2L55" class="LineNr">55 </span>
+<span id="W2L56" class="LineNr">56 </span>THE CONTRIBUTION IS PROVIDED &quot;AS IS&quot;. MORE PARTICULARLY, ALL EXPRESS OR IMPLIED WARRANTIES INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTY OF SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE EXPRESSLY DISCLAIMED BY YOU TO US AND BY US TO YOU. TO THE EXTENT THAT ANY SUCH WARRANTIES CANNOT BE DISCLAIMED, SUCH WARRANTY IS LIMITED IN DURATION AND EXTENT TO THE MINIMUM PERIOD AND EXTENT PERMITTED BY LAW.
+<span id="W2L57" class="LineNr">57 </span>
+<span id="W2L58" class="LineNr">58 </span>6. Consequential damage waiver
+<span id="W2L59" class="LineNr">59 </span>
+<span id="W2L60" class="Folded">60 </span><span class="Folded">+-- 32 Zeilen: TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT WILL YOU OR WE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF ANTICIPATED SAVINGS, LOSS OF DATA, INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL AND EXEMPLARY DAMAGES ARISING OUT OF THIS AGREEMENT REGARDLESS OF THE LEGAL OR EQUITABLE THEORY (CONTRACT, TORT OR OTHERWISE) UPON WHICH THE CLAIM IS BASED.</span>
+</pre>
+</div></td>
+</tr>
+</table>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->
+
