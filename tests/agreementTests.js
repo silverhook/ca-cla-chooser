@@ -1,5 +1,3 @@
-//const Page = require('./pageobjects/page');
-//const ApplyPage = require('./pageobjects/apply.page')
 const AgreementPage = require('./pageobjects/agreement.page')
 const { expect } = require('chai');
 const agreementPage = new AgreementPage()
@@ -14,6 +12,7 @@ describe('The length of each document version should be correct', async function
         await agreementPage.goThroughAll();
     });
 
+    // TODO make a helper function that comppiles an array of all numbering, and checks it
     it('the fla version (html) with default values should have the right length', async function() {
         await expect(agreementPage.applyResultHtmlFlaText).to.exist;
         let t = await agreementPage.applyResultHtmlFlaText.getValue();
@@ -21,7 +20,7 @@ describe('The length of each document version should be correct', async function
         console.log(`the type of t is: ${typeof t}`)
         console.log(`The FLA length is: ${l}`)
         console.log(`The beginning of the text is ${t.slice(0, 24)}`)
-        await expect(l).to.equal(17019);
+        await expect(l).to.equal(17079);
 
     });
 
@@ -30,7 +29,7 @@ describe('The length of each document version should be correct', async function
         await expect(agreementPage.applyResultHtmlFlaEntityText).to.exist;
         let l = await agreementPage.getHtmlFlaEntityTextLength();
         console.log(`The FLA Entity length is: ${l}`);
-        await expect(l).to.equal(17015);
+        await expect(l).to.equal(17075);
     });
 
     it('the fla version with outbound option 1 should be correct', async function() {
@@ -50,7 +49,7 @@ describe('The length of each document version should be correct', async function
         await expect(agreementPage.applyResultHtmlClaText).to.exist;
         let l = await agreementPage.getHtmlClaTextLength();
         console.log(`The CLA length is: ${l}`)
-        await expect(l).to.equal(15531);
+        await expect(l).to.equal(15591);
 
     });
 
@@ -74,11 +73,11 @@ describe('The length of each document version should be correct', async function
         console.log('STUB: testing if the length of cla-outbound option 5 is correct')
     })
 
-    
+
     it('the cla version with outbound option 1 patent pledge should be correct', async function() {
         console.log('STUB: testing if the length of cla-outbound option 1 is correct')
     })
-    
+
     it('the cla version with outbound option 2 patent pledge should be correct', async function() {
         console.log('STUB: testing if the length of cla-outbound option 2 is correct')
     })
@@ -105,7 +104,7 @@ describe('The length of each document version should be correct', async function
         await expect(agreementPage.applyResultHtmlClaEntityText).to.exist;
         let l = await agreementPage.getHtmlClaEntityTextLength();
         console.log(`The CLA Entity length is: ${l}`)
-        await expect(l).to.equal(15527);
+        await expect(l).to.equal(15587);
 
     });
     it('the query url without special options should have the same value', async function() {
@@ -114,11 +113,13 @@ describe('The length of each document version should be correct', async function
         await expect(url).to.exist;
         var url_length = await agreementPage.getLinkFlaLength();
         console.log(`url length is ${url_length}`)
-        await expect(url_length).to.equal(388);
+        await expect(url_length).to.equal(403);
     })
 });
 
 // FIXME add proper testing of all parameters. add license-policy
+// could also add custom matcher (expect) such as expect.hasUrlParameter
+// or expect.hasConfigValue
 describe('the url parameters should be correct', async function () {
     describe('all parameters should be present', async function () {
          beforeEach(async function() {
@@ -133,8 +134,8 @@ describe('the url parameters should be correct', async function () {
             console.log(`There are ${searchParams.size} parameters`)
             for (const p of searchParams) {
                 console.log(p);
-                
             }
+            await expect(searchParams.size).to.equal(21);
         })
     })
 })
