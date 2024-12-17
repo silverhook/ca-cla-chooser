@@ -1,12 +1,17 @@
 name: deploy via ssh
 on:
+  workflow_run:
+    workflows: ["Webdriverio tests"]
+    branches: [main]
+    types:
+      - completed
   push:
     branches:
       - main
   workflow_dispatch:
 jobs:
   deploy:
-    if: github.repository_owner == 'contributoragreements'
+    if: github.repository_owner == 'contributoragreements' && ${{ github.event.workflow_run.conclusion == 'success' }}
     name: deploy
     runs-on: ubuntu-20.04
     steps:
@@ -24,4 +29,3 @@ jobs:
         script: |
           cd ~/contributoragreements.org/ca-cla-chooser
           git pull origin main
-
