@@ -37,9 +37,9 @@ In any event, please contact Us at admin@source.project
 
 **"You"** means the individual Copyright owner who Submits a Contribution to Us.
 
-**"Legal Entity"** means an entity that is not a natural person.
+**"Legal Entity"** means an entity that is not a individual person.
 
-**"Affiliate"** means any other Legal Entity that controls, is controlled by, or under common control with that Legal Entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such Legal Entity, whether by contract or otherwise, (ii) ownership of fifty percent (50%) or more of the outstanding shares or securities that vote to elect the management or other persons who direct such Legal Entity or (iii) beneficial ownership of such entity.
+**"Affiliate"** means any other Legal Entity that controls, is controlled by, or under common control with that Legal Entity.
 
 **"Contribution"** means any original work of authorship, including any original modifications or additions to an existing work of authorship, Submitted for inclusion into Material by You to Us, in which You own the Copyright.
 
@@ -47,7 +47,7 @@ In any event, please contact Us at admin@source.project
 
 **"Material"** means the software and/or documentation of Source Project that We make available to third parties.
 
-**"Submit"** means any act by which a Contribution is transferred to Us by You by means of tangible or intangible media, including but not limited to electronic mailing lists, source code control systems, and issue tracking systems that are managed by, or on behalf of, Us, but excluding any transfer that is conspicuously marked or otherwise designated in writing by You as "Not a Contribution."
+**"Submit"** means any act by which a Contribution is transferred to Us by You by means of tangible or intangible media, including but not limited to electronic mailing lists, source code control systems, and issue tracking systems, but excluding any transfer that is conspicuously marked or otherwise designated in writing by You as "Not a Contribution."
 
 **"Documentation"** means any non-software portion of a Contribution.
 
