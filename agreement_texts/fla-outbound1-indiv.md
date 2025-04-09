@@ -69,15 +69,13 @@ Moral Rights remain unaffected to the extent they are recognized and not waivabl
 
 #### 2.3 Copyright license back to You
 
-Upon such grant of rights to Us, We immediately grant to You a worldwide, royalty-free, non-exclusive, perpetual and irrevocable license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, under the Copyright covering the Contribution to use the Contribution by all means, including, but not limited to:
+Upon such grant of rights to Us, We immediately grant to You an identical license as in Section 2.1 (Copyright license to Us) with the only difference that:
 
-* publish the Contribution,
-* modify the Contribution,
-* prepare derivative works based upon or containing the Contribution and/or to combine the Contribution with other Materials,
-* reproduce the Contribution in original or modified form,
-* distribute, to make the Contribution available to the public, display and publicly perform the Contribution in original or modified form.
+* it is non-exclusive,
+* it is irrevocable without the exception of Section 8.2,
+* it is limited to the Contribution and does not provide any rights to the Material,
+* You may combine Your Contributions with any other project, not limited to Materials.
 
-This license back is limited to the Contribution and does not provide any rights to the Material.
 
 #### 2.4 Patent license
 
