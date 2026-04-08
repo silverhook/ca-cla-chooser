@@ -1,4 +1,4 @@
-## Fiduciary License Agreement 2.0
+## Fiduciary License Agreement 2.1
 
 based on the
 
@@ -10,7 +10,7 @@ Thank you for your interest in contributing to Max Mustermann's Source Project (
 
 The purpose of this contributor agreement ("Agreement") is to clarify and document the rights granted by contributors to Us. To make this document effective, please follow the instructions at https://source.project/sign-cla.
 
-### 0. Preamble
+### Preamble
 
 Software is deeply embedded in all aspects of our lives and it is important that it empower, rather than restrict us. Free Software gives everybody the rights to use, understand, adapt and share software. These rights help support other fundamental freedoms like freedom of speech, press and privacy.
 
@@ -33,7 +33,7 @@ If You do not own the Copyright in Your Contribution, any other author or copyri
 
 In any event, please contact Us at admin@source.project
 
-### 1. Definitions
+###  Definitions
 
 **"You"** means the individual Copyright owner who Submits a Contribution to Us.
 
@@ -51,11 +51,11 @@ In any event, please contact Us at admin@source.project
 
 **"Documentation"** means any non-software portion of a Contribution.
 
-### 2. License grant
+### License grant
 
-#### 2.1 Copyright license to Us
+#### Copyright license to Us
 
-Subject to the terms and conditions of this Agreement, You hereby grant to Us a worldwide, royalty-free, exclusive, perpetual and irrevocable (except as stated in Section 8.2) license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, under the Copyright covering the Contribution to use the Contribution by all means, including, but not limited to:
+Subject to the terms and conditions of this Agreement, You hereby grant to Us a worldwide, royalty-free, exclusive, perpetual and irrevocable (except as stated in Section "Term") license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, under the Copyright covering the Contribution to use the Contribution by all means, including, but not limited to:
 
 * publish the Contribution,
 * modify the Contribution,
@@ -63,29 +63,33 @@ Subject to the terms and conditions of this Agreement, You hereby grant to Us a 
 * reproduce the Contribution in original or modified form,
 * distribute, to make the Contribution available to the public, display and publicly perform the Contribution in original or modified form.
 
-#### 2.2 Moral rights
+#### Moral rights
 
 Moral Rights remain unaffected to the extent they are recognized and not waivable by applicable law. Notwithstanding, You may add your name to the attribution mechanism customary used in the Materials you Contribute to, such as the header of the source code files of Your Contribution, and We will respect this attribution when using Your Contribution.
 
-#### 2.3 Copyright license back to You
+#### Copyright license back to You
 
-Upon such grant of rights to Us, We immediately grant to You an identical license as in Section 2.1 (Copyright license to Us) with the only difference that:
+Upon such grant of rights to Us, We immediately grant to You an identical license as in Subsection "Copyright license to Us" with the only difference that:
 
 * it is non-exclusive,
-* it is irrevocable without the exception of Section 8.2,
+* it is irrevocable without the exception in the second paragraph of Section "Term",
 * it is limited to the Contribution and does not provide any rights to the Material,
 * You may combine Your Contributions with any other project, not limited to Materials.
 
 
-#### 2.4 Patent license
+#### Patent license
 
-Subject to the terms and conditions of this Agreement You hereby grant to Us and to recipients of Materials distributed by Us a worldwide, royalty-free, non-exclusive, perpetual and irrevocable (except as stated in Section 3.2) patent license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, to make, have made, use, sell, offer for sale, import and otherwise transfer the Contribution and the Contribution in combination with any Material (and portions of such combination). This license applies to all patents owned or controlled by You, whether already acquired or hereafter acquired, that would be infringed by making, having made, using, selling, offering for sale, importing or otherwise transferring of Your Contribution(s) alone or by combination of Your Contribution(s) with any Material.
+<!--TODO: check Apache-2.0 and MPL-2.0 for inspiration (perhaps narrow down the last sentence to “Material at the time of Submission”)
+missing: no-charge royalty-free
+-->
 
-#### 2.5 Revocation of patent license
+Subject to the terms and conditions of this Agreement You hereby grant to Us a worldwide, royalty-free, non-exclusive, perpetual and irrevocable (except as stated in Subsection "Revocation of patent license") patent license, with the right to transfer an unlimited number of non-exclusive licenses or to grant sublicenses to third parties, to make, have made, use, sell, offer for sale, import and otherwise transfer the Contribution and the Contribution in combination with any Material (and portions of such combination). This license applies to all patents owned or controlled by You, whether already acquired or hereafter acquired, that would be infringed by making, having made, using, selling, offering for sale, importing or otherwise transferring of Your Contribution(s) alone or by combination of Your Contribution(s) with any Material.
 
-You reserve the right to revoke the patent license stated in section 3.1 if We make any infringement claim that is targeted at your Contribution and not asserted for a Defensive Purpose. An assertion of claims of the Patents shall be considered for a "Defensive Purpose" if the claims are asserted against an entity that has filed, maintained, threatened, or voluntarily participated in a patent infringement lawsuit against Us or any of Our licensees.
+#### Revocation of patent license
 
-### 3. License obligations by Us
+You reserve the right to revoke the patent license stated in Subection "Patent license" if We make any infringement claim that is targeted at your Contribution and not asserted for a Defensive Purpose. An assertion of claims of the Patents shall be considered for a "Defensive Purpose" if the claims are asserted against an entity that has filed, maintained, threatened, or voluntarily participated in a patent infringement lawsuit against Us or any of Our licensees.
+
+### License obligations by Us
 
 We may, but are under no obligation to, include the Contribution You Submitted to Us into the Material.
 
@@ -110,41 +114,41 @@ For example, if the Contribution and/or Materials are:
 
 We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms of any licenses the Free Software Foundation classifies as Free Software licenses and which are approved by the Open Source Initiative as Open Source licenses.
 
-### 4. Disclaimer
+### Disclaimer
 
-#### 4.1 Disclaimer of warranty
+#### Disclaimer of warranty
 
 We acknokwledge that you provide the Contribution "as is".
 
 More particularly, You disclaim all express or implied warranties including, without limitation, any implied warranty of satisfactory quality, fitness for a particular purpose and non-infringement. To the extent that any such warranties cannot be disclaimed, such warranty is limited in duration and extent to the minimum period and extent permitted by law.
 
-#### 4.2. Consequential damage waiver
+#### Consequential damage waiver
 
 To the maximum extent permitted by applicable law, in no event will You or We be liable for any loss of profits, loss of anticipated savings, loss of data, indirect, special, incidental, consequential and exemplary damages arising out of this Agreement regardless of the legal or equitable theory (contract, tort or otherwise) upon which the claim is based.
 
-#### 4.3. Approximation of disclaimer and damage waiver
+#### Approximation of disclaimer and damage waiver
 
-If the disclaimer and damage waiver mentioned in section 4.1. and section 4.2. cannot be given legal effect under applicable local law, reviewing courts shall apply local law that most closely approximates an absolute waiver of all civil or contractual liability in connection with the Contribution.
+If the disclaimer and damage waiver mentioned in Subsection "Disclaimer of warranty" and Section "Consequential damage waiver" cannot be given legal effect under applicable local law, reviewing courts shall apply local law that most closely approximates an absolute waiver of all civil or contractual liability in connection with the Contribution.
 
-### 5. Term
+### Term
 
-5.1 This Agreement shall come into effect upon Your acceptance of the terms and conditions.
+This Agreement shall come into effect upon Your acceptance of the terms and conditions.
 
-5.2 This Agreement shall apply for the term of the copyright and patents licensed here. However, You shall have the right to terminate the Agreement if We do not fulfill the obligations as set forth in Section 4. Such termination must be made in writing.
+This Agreement shall apply for the term of the copyright and patents licensed here. However, You shall have the right to terminate the Agreement if We do not fulfill the obligations as set forth in Section "License obligations by Us" Such termination must be made in writing.
 
-5.3 In the event of a termination of this Agreement Sections 4., 5., and 6. shall survive such termination and shall remain in full force thereafter. For the avoidance of doubt, Free and Open Source Software (sub)licenses that have already been granted for Contributions at the date of the termination shall remain in full force after the termination of this Agreement.
+In the event of a termination of this Agreement Sections "Disclaimer", "Term" and "Miscellaneous" shall survive such termination and shall remain in full force thereafter. For the avoidance of doubt, Free and Open Source Software (sub)licenses that have already been granted for Contributions at the date of the termination shall remain in full force after the termination of this Agreement.
 
-### 6. Miscellaneous
+### Miscellaneous
 
-6.1 This Agreement and all disputes, claims, actions, suits or other proceedings arising out of this agreement or relating in any way to it shall be governed by the laws of Germany excluding its private international law provisions.
+This Agreement and all disputes, claims, actions, suits or other proceedings arising out of this agreement or relating in any way to it shall be governed by the laws of Germany excluding its private international law provisions.
 
-6.2 This Agreement sets out the entire agreement between You and Us for Your Contributions to Us and overrides all other agreements or understandings.
+This Agreement sets out the entire agreement between You and Us for Your Contributions to Us and overrides all other agreements or understandings.
 
-6.3 In case of Your death, this agreement shall continue with Your heirs. In case of more than one heir, all heirs must exercise their rights through a commonly authorized person.
+In case of Your death, this agreement shall continue with Your heirs. In case of more than one heir, all heirs must exercise their rights through a commonly authorized person.
 
-6.4 If any provision of this Agreement is found void and unenforceable, such provision will be replaced to the extent possible with a provision that comes closest to the meaning of the original provision and that is enforceable. The terms and conditions set forth in this Agreement shall apply notwithstanding any failure of essential purpose of this Agreement or any limited remedy to the maximum extent possible under law.
+If any provision of this Agreement is found void and unenforceable, such provision will be replaced to the extent possible with a provision that comes closest to the meaning of the original provision and that is enforceable. The terms and conditions set forth in this Agreement shall apply notwithstanding any failure of essential purpose of this Agreement or any limited remedy to the maximum extent possible under law.
 
-6.5 You agree to notify Us of any facts or circumstances of which you become aware that would make Your representations under this Agreement inaccurate in any respect.
+You agree to notify Us of any facts or circumstances of which you become aware that would make Your representations under this Agreement inaccurate in any respect.
 
 ### You
 
