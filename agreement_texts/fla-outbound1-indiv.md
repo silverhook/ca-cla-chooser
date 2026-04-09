@@ -24,10 +24,9 @@ This process only serves for the transfer of economic rights. So-called moral ri
 
 ### How to use this FLA
 
-<!--TODO move out of the preamble -->
 <!--TODO figure out what to do with the contact -->
 
-If You are an employee and have created the Contribution as part of your employment, You need to have Your employer approve this Agreement or sign the Entity version of this document.
+If You are an employee and have created the Contribution as part of your employment, You need to have Your employer approve this Agreement.
 
 If You do not own the Copyright in Your Contribution, any other author or copyright holder of the Contribution should also sign this.
 
@@ -35,7 +34,8 @@ In any event, please contact Us at admin@source.project
 
 ###  Definitions
 
-**"You"** means the individual Copyright owner who Submits a Contribution to Us.
+**"You"** means the individual Copyright owner who Submits a Contribution to Us; or
+if the Copyright in the Contribution is held by a Legal Entity and the Contribution is being Submitted to Us on behalf of such Legal Entity, "You" means such Legal Entity.
 
 **"Legal Entity"** means an entity that is not a individual person.
 
