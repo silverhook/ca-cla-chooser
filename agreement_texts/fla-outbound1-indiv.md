@@ -144,7 +144,7 @@ This Agreement and all disputes, claims, actions, suits or other proceedings ari
 
 This Agreement sets out the entire agreement between You and Us for Your Contributions to Us and overrides all other agreements or understandings.
 
-In case of Your death, this agreement shall continue with Your heirs. In case of more than one heir, all heirs must exercise their rights through a commonly authorized person.
+In case of Your death, this agreement shall continue with Your heirs. In case of more than one heir, all heirs must exercise their rights through a commonly authorized person. In case "You" are a Legal Entity, this paragraph is moot.
 
 If any provision of this Agreement is found void and unenforceable, such provision will be replaced to the extent possible with a provision that comes closest to the meaning of the original provision and that is enforceable. The terms and conditions set forth in this Agreement shall apply notwithstanding any failure of essential purpose of this Agreement or any limited remedy to the maximum extent possible under law.
 
