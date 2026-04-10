@@ -93,7 +93,7 @@ You reserve the right to revoke the patent license stated in Subection "Patent l
 
 We may, but are under no obligation to, include the Contribution You Submitted to Us into the Material.
 
-We agree to (sub)license the Contribution or any Materials containing, based on or derived from your Contribution under the terms of any licenses that are free and open, following respective commonly accepted definitions. For clarification, should we make available any Material under a non-free or non-open license, we must make a version of such Material available under a free and open license too.
+We agree to (sub)license the Contribution or any Materials containing, based on or derived from your Contribution under the terms of any licenses that qualify as [Free Software](https://www.gnu.org/philosophy/free-sw.html) as defined by the Free Software Foundation and at the same time qualify as [Open Source](https://opensource.org/osd) as defined by the Open Source Initiative. For clarification, should we make available any Material under a non-free or non-open license, we must make a version of such Material available under a free and open license too.
 
 <!-- TODO: what happens if someone chooses Option 2 or 3 and explicitly selects license(s) – can those exclude a proprietary option, or not (and if so, how?) -->
 <!-- Option 2:  
@@ -103,16 +103,9 @@ More specifically and in strict accordance with the above paragraph, we agree to
 More specifically and in strict accordance with the above paragraph, we agree to (sub)license the Contribution or any Materials containing, based on or derived from the Contribution only in accordance with our licensing policy available at: <span id="tmp-license-policy-location">[location of licensing policy], where any intent of applying non-free or non-open licenses by Us needs to be described as well.
 -->
 
-<!--TODO: use when you have expanded the license grants to cover also data base rights, masks, hardware topology etc.
-
-For example, if the Contribution and/or Materials are:
-
-* software: licenses that are both [Free Software](https://www.gnu.org/philosophy/free-sw.html), as defined by the Free Software Foundation, and [Open Source](https://opensource.org/osd), as defined by the Open Source Initiative;
-* hardware: licenses that are [Open Source Hardware](https://www.oshwa.org/definition/), as defined by the Open Source Hardware Association;
-* content: licenses that are both [Free Culture Licenses](https://freedomdefined.org/Definition), as defined by Freedom Defined, and [Open Licenses](https://opendefinition.org/od/)”, as defined by the Open Knowledge Foundation.
--->
-
-We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms of any licenses the Free Software Foundation classifies as Free Software licenses and which are approved by the Open Source Initiative as Open Source licenses.
+<!-- TODO: is this an issue with dual-licensing? patent-troll -->
+We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms of any licenses that qualify as Free Software as defined by the Free Software Foundation and at the same time qualify as Open Source as defined by the Open Source Initiative.
+<!-- TODO alternative: We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms that are in accordance with Section. -->
 
 ### Disclaimer
 
