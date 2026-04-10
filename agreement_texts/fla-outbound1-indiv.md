@@ -111,7 +111,7 @@ We agree to license patents owned or controlled by You only to the extent necess
 
 #### Disclaimer of warranty
 
-**We acknokwledge that you provide the Contribution "as is".**
+**We acknowledge that you provide the Contribution "as is".**
 
 **More particularly, You disclaim all express or implied warranties including, without limitation, any implied warranty of satisfactory quality, fitness for a particular purpose and non-infringement. To the extent that any such warranties cannot be disclaimed, such warranty is limited in duration and extent to the minimum period and extent permitted by law.**
 
