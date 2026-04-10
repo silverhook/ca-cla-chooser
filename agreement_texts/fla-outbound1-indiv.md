@@ -2,13 +2,13 @@
 
 based on the
 
-## Individual Contributor Exclusive License Agreement
+## Exclusive License Agreement
 
 ## (including the Traditional Patent License OPTION)
 
-Thank you for your interest in contributing to Max Mustermann's Source Project ("We" or "Us").
+Thank you for your interest in contributing to <span id="tmp-beneficiary-name">[ENTITY_NAME]</span>'s <span id="tmp-project-name">[PROJECT_NAME / Software]</span> ("We" or "Us").
 
-The purpose of this contributor agreement ("Agreement") is to clarify and document the rights granted by contributors to Us. To make this document effective, please follow the instructions at https://source.project/sign-cla.
+The purpose of this contributor agreement ("Agreement") is to clarify and document the rights granted by contributors to Us. To make this document effective, please follow the instructions at <span id="tmp-submission-instructions">[SUBMISSION_INSTRUCTIONS]</span>.
 
 ### Preamble
 
@@ -30,7 +30,7 @@ If You are an employee and have created the Contribution as part of your employm
 
 If You do not own the Copyright in Your Contribution, any other author or copyright holder of the Contribution should also sign this.
 
-In any event, please contact Us at admin@source.project
+In any event, please contact Us at <span id="tmp-project-email">[ADD CONTACT DETAILS (Project email)]</span>
 
 ###  Definitions
 
@@ -45,7 +45,7 @@ if the Copyright in the Contribution is held by a Legal Entity and the Contribut
 
 **"Copyright"** means all rights protecting works of authorship, including copyright, moral and neighboring rights, as appropriate, for the full term of their existence.
 
-**"Material"** means the software and/or documentation of Source Project that We make available to third parties.
+**"Material"** means the software and/or documentation of <span id="tmp-project-name">[PROJECT_NAME / Software]</span> that We make available to third parties.
 
 **"Submit"** means any act by which a Contribution is transferred to Us by You by means of tangible or intangible media, including but not limited to electronic mailing lists, source code control systems, and issue tracking systems, but excluding any transfer that is conspicuously marked or otherwise designated in writing by You as "Not a Contribution."
 
@@ -100,7 +100,7 @@ We agree to (sub)license the Contribution or any Materials containing, based on 
 More specifically and in strict accordance with the above paragraph, we agree to (sub)license the Contribution or any Materials containing, based on or derived from the Contribution only under the terms of the following license(s) <span id="tmp-licenses-fsfe">[LIST_OF_LICENSES]</span> (including any right to adopt any future version of a license if permitted), whereby any non-free or non-open licenses need to be listed as well.
 -->
 <!-- Option 3:
-More specifically and in strict accordance with the above paragraph, we agree to (sub)license the Contribution or any Materials containing, based on or derived from the Contribution only in accordance with our licensing policy available at: <span id="tmp-license-policy-location">[location of licensing policy], where any intent of applying non-free or non-open licenses by Us needs to be described as well.
+More specifically and in strict accordance with the above paragraph, we agree to (sub)license the Contribution or any Materials containing, based on or derived from the Contribution only in accordance with our licensing policy available at: <span id="tmp-license-policy-location">[location of licensing policy]</span>, where any intent of applying non-free or non-open licenses by Us needs to be described as well.
 -->
 
 <!-- TODO: is this an issue with dual-licensing? patent-troll -->
@@ -133,7 +133,7 @@ In the event of a termination of this Agreement Sections "Disclaimer", "Term" an
 
 ### Miscellaneous
 
-This Agreement and all disputes, claims, actions, suits or other proceedings arising out of this agreement or relating in any way to it shall be governed by the laws of Germany excluding its private international law provisions.
+This Agreement and all disputes, claims, actions, suits or other proceedings arising out of this agreement or relating in any way to it shall be governed by the laws of <span id="tmp-project-jurisdiction">[JURISDICTION]</span> excluding its private international law provisions.
 
 This Agreement sets out the entire agreement between You and Us for Your Contributions to Us and overrides all other agreements or understandings.
 
