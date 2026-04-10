@@ -111,17 +111,17 @@ We agree to license patents owned or controlled by You only to the extent necess
 
 #### Disclaimer of warranty
 
-We acknokwledge that you provide the Contribution "as is".
+**We acknokwledge that you provide the Contribution "as is".**
 
-More particularly, You disclaim all express or implied warranties including, without limitation, any implied warranty of satisfactory quality, fitness for a particular purpose and non-infringement. To the extent that any such warranties cannot be disclaimed, such warranty is limited in duration and extent to the minimum period and extent permitted by law.
+**More particularly, You disclaim all express or implied warranties including, without limitation, any implied warranty of satisfactory quality, fitness for a particular purpose and non-infringement. To the extent that any such warranties cannot be disclaimed, such warranty is limited in duration and extent to the minimum period and extent permitted by law.**
 
 #### Consequential damage waiver
 
-To the maximum extent permitted by applicable law, in no event will You or We be liable for any loss of profits, loss of anticipated savings, loss of data, indirect, special, incidental, consequential and exemplary damages arising out of this Agreement regardless of the legal or equitable theory (contract, tort or otherwise) upon which the claim is based.
+**To the maximum extent permitted by applicable law, in no event will You or We be liable for any loss of profits, loss of anticipated savings, loss of data, indirect, special, incidental, consequential and exemplary damages arising out of this Agreement regardless of the legal or equitable theory (contract, tort or otherwise) upon which the claim is based.**
 
 #### Approximation of disclaimer and damage waiver
 
-If the disclaimer and damage waiver mentioned in Subsection "Disclaimer of warranty" and Section "Consequential damage waiver" cannot be given legal effect under applicable local law, reviewing courts shall apply local law that most closely approximates an absolute waiver of all civil or contractual liability in connection with the Contribution.
+**If the disclaimer and damage waiver mentioned in Subsection "Disclaimer of warranty" and Section "Consequential damage waiver" cannot be given legal effect under applicable local law, reviewing courts shall apply local law that most closely approximates an absolute waiver of all civil or contractual liability in connection with the Contribution.**
 
 ### Term
 
