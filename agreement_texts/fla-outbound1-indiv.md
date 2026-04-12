@@ -106,8 +106,7 @@ More specifically and in strict accordance with the above paragraph, we agree to
 -->
 
 <!-- TODO: is this an issue with dual-licensing? patent-troll -->
-We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms of any licenses that qualify as Free Software as defined by the Free Software Foundation and at the same time qualify as Open Source as defined by the Open Source Initiative.
-<!-- TODO alternative: We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms that are in accordance with Section. -->
+We agree to license patents owned or controlled by You only to the extent necessary to (sub)license Your Contribution(s) and the combination of Your Contribution(s) with the Material under the terms that are in accordance with Section.
 
 ### Disclaimer
 
